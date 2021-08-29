@@ -1,0 +1,14 @@
+html {
+    background-color: #2d343b;
+    margin: 0;
+    padding: 0;
+}
+
+html * {
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+}
+
+.center {
+    text-align: center;
+}
