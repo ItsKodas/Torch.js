@@ -4,11 +4,20 @@ html {
     padding: 0;
 }
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 html * {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     color: white;
 }
 
-.center {
-    text-align: center;
+h1 {
+    margin: .6em;
+}
+
+.inline * {
+    display: inline-block;
 }

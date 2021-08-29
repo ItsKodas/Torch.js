@@ -2,13 +2,20 @@
 <html>
 
 <head>
+    <script src="js/setup.js"></script>
+
+    <title>Setup | SectorToolbox</title>
+
     <%- include('partials/header.ejs') %>
-        <title>Setup | SectorToolbox</title>
 </head>
 
-<nav style="background-color: #3f4853;">
-    <h1>Setup</h1>
-</nav>
+<body>
+    <nav class="inline" style="background-color: #3f4853; position: absolute; width: 100%">
+        <h1>Setup</h1>
+        <i onclick="uninstall()" class="fas fa-trash-alt fa-2x" style="position: absolute; top: 25%; right: .5em; cursor: pointer;" title="Cancel Setup and Uninstall"></i>
+    </nav>
+
+</body>
 
 
 </html>

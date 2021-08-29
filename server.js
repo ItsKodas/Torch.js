@@ -2,6 +2,8 @@
 const fs = require('fs')
 const { exec } = require('child_process')
 
+
+
 //!
 //! Installation Check
 //!
@@ -21,20 +23,21 @@ if (!fs.existsSync('local')) {
 }
 
 //? Install Service
-if (process.argv[2] == 'install') {
-    exec('.\\util\\nssm.exe install "Sector Toolbox" .\\util\\start.bat', (err, stdout, stderr) => {
+if (process.argv[2] === 'install') {
+    return exec(`.\\util\\nssm.exe install "Sector Toolbox" ${__dirname}\\start.bat`, (err, stdout, stderr) => {
         if (err) return console.error(err)
     }).on('exit', code => {
-        console.log(`Service Successfully Installed | Code ${code}`)
+        console.log(`Process Exit | Code ${code}`)
     })
 }
 
 //? Uninstall Service
-if (process.argv[2] == 'uninstall') {
-    exec('.\\util\\nssm.exe remove "Sector Toolbox"', (err, stdout, stderr) => {
+if (process.argv[2] === 'uninstall') {
+    fs.rmdirSync('./local', { recursive: true })
+    return exec('.\\util\\nssm.exe remove "Sector Toolbox"', (err, stdout, stderr) => {
         if (err) return console.error(err)
     }).on('exit', code => {
-        console.log(`Service Successfully Uninstalled | Code ${code}`)
+        console.log(`Process Exit | Code ${code}`)
     })
 }
 
@@ -62,7 +65,5 @@ app.listen(port, () => {
     if (!toolbox.web.setup_complete) exec('start http://localhost:' + port)
 })
 
-//? Load Homepage/Setup
-app.get('/', (req, res) => {
-    if (!toolbox.web.setup_complete) res.render('setup')
-})
+//? Setup Pages
+if (!toolbox.web.setup_complete) return require('./site/setup.js')(app)

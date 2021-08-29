@@ -1,2 +1,3 @@
+@echo off
 node server.js uninstall
-pause
+timeout 3

@@ -1,3 +1,5 @@
-npm i fs express discord.js node-fetch ejs
+@echo off
+powershell npm i fs express discord.js node-fetch ejs
 node server.js install
-pause
+timeout 3
+start start.bat

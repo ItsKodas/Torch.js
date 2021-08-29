@@ -1,2 +1,2 @@
-cd..
+@echo off
 node server.js
