@@ -1,0 +1,1 @@
+npm i fs express discord.js node-fetch ejs
