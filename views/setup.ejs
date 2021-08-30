@@ -19,13 +19,21 @@
     <div class="inline" style="width: 100%;">
 
         <div class="card">
-            <h2>System</h2>
-            <input type="text" value="Hello World!">
-        </div>
+            <form id="system_configurations">
+                <h2>System</h2>
 
-        <div class="card">
-            <h2>Discord</h2>
-            <input type="text" value="">
+                <label style="padding-top: 0;">Server Name</label>
+                <input type="text" placeholder="E.g. Horizons">
+
+                <label>Server Address (Domain/IPv4)</label>
+                <input type="text" placeholder="domain.com or 0.0.0.0" value="<%= server_ipv4 %>">
+
+                <label>Server Directory (This Directory will Store all Torch Servers)</label>
+                <input type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
+
+                <button onclick="system_next()">Next</button>
+            </form>
+
         </div>
 
     </div>

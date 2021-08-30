@@ -66,4 +66,4 @@ app.listen(port, () => {
 })
 
 //? Setup Pages
-if (!toolbox.web.setup_complete) return require('./site/setup.js')(app)
+if (!toolbox.web.setup_complete) return require('./site/setup.js')(app, __dirname)

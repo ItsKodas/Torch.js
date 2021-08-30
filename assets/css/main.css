@@ -35,9 +35,9 @@ html * {
     background-color: #3f4853;
     margin: 1em;
     padding: 1em;
+    padding-right: 1.75em;
     position: relative;
     border-radius: .3em;
-    width: 40%;
 }
 
 .card * {
@@ -49,10 +49,29 @@ html * {
     margin-bottom: 1em;
 }
 
+.card label {
+    padding-top: 2em;
+    padding-bottom: .5em;
+}
+
 input {
     background-color: #394047;
     border-style: solid;
     border-color: #5e6063;
     outline: none;
     border-radius: .2em;
+    font-size: 15pt;
+    padding: .2em;
+    width: 30em;
+}
+
+button {
+    background-color: #3c9fd8;
+    border-style: none;
+    border-radius: .3em;
+    font-size: 15pt;
+    margin-top: 1em;
+    float: right;
+    cursor: pointer;
+    padding: .2em .4em;
 }
