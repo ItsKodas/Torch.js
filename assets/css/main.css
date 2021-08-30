@@ -1,3 +1,11 @@
+::selection {
+    background-color: #747780;
+}
+
+::-moz-selection {
+    background-color: #747780;
+}
+
 html {
     background-color: #2d343b;
     margin: 0;
@@ -14,10 +22,37 @@ html * {
     color: white;
 }
 
-h1 {
-    margin: .6em;
+.top-title {
+    margin: .4em;
+    margin-left: 1em;
 }
 
 .inline * {
     display: inline-block;
+}
+
+.card {
+    background-color: #3f4853;
+    margin: 1em;
+    padding: 1em;
+    position: relative;
+    border-radius: .3em;
+    width: 40%;
+}
+
+.card * {
+    display: block;
+}
+
+.card h2 {
+    margin: 0;
+    margin-bottom: 1em;
+}
+
+input {
+    background-color: #394047;
+    border-style: solid;
+    border-color: #5e6063;
+    outline: none;
+    border-radius: .2em;
 }

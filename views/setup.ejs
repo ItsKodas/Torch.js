@@ -4,16 +4,32 @@
 <head>
     <script src="js/setup.js"></script>
 
-    <title>Setup | SectorToolbox</title>
+    <title>Setup | Torch.js</title>
 
     <%- include('partials/header.ejs') %>
 </head>
 
 <body>
-    <nav class="inline" style="background-color: #3f4853; position: absolute; width: 100%">
-        <h1>Setup</h1>
-        <i onclick="uninstall()" class="fas fa-trash-alt fa-2x" style="position: absolute; top: 25%; right: .5em; cursor: pointer;" title="Cancel Setup and Uninstall"></i>
-    </nav>
+
+    <div class="inline" style="background-color: #3f4853; width: 100%;">
+        <h1 class="top-title">Setup</h1>
+        <i onclick="uninstall()" class="fas fa-trash-alt fa-2x" style="position: absolute; top: .5em; right: .5em; cursor: pointer;" title="Cancel Setup and Uninstall"></i>
+    </div>
+
+    <div class="inline" style="width: 100%;">
+
+        <div class="card">
+            <h2>System</h2>
+            <input type="text" value="Hello World!">
+        </div>
+
+        <div class="card">
+            <h2>Discord</h2>
+            <input type="text" value="">
+        </div>
+
+    </div>
+
 
 </body>
 
