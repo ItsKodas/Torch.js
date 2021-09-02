@@ -3,25 +3,29 @@ function uninstall() {
     fetch("/uninstall")
 }
 
-function system_next() {
+function submit_configurations() {
     if (!confirm("Finalize System Configurations?")) return
-    var formdata = new FormData(document.system_configurations)
-    console.log(formdata)
+    var formdata = new FormData()
 
-    /*var requestOptions = {
+    var data = $('[id^=system_]')
+    for (id of data) {
+        formdata.append(id.id, id.value)
+    }
+
+    var requestOptions = {
         method: 'POST',
         body: formdata,
         redirect: 'follow'
     };
 
-    fetch("/trade/flagged-options", requestOptions)
-        .then(response => response.json())
-        .then(result => {
-            console.log(result.status)
-            if (result.status === 200) window.location.reload()
-                //else return alert(result.body)
+    fetch("/", requestOptions)
+        .then(async response => {
+            var text = await response.text()
+            var status = response.status
+            if (status == 200) window.location.reload()
+            else alert(text)
         })
-        .catch(error => console.log('error', error))*/
+        .catch(error => console.log('error', error))
 
     return false
 }

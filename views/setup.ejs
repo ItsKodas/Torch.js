@@ -19,20 +19,19 @@
     <div class="inline" style="width: 100%;">
 
         <div class="card">
-            <form id="system_configurations">
-                <h2>System</h2>
+            <h2>System</h2>
 
-                <label style="padding-top: 0;">Server Name</label>
-                <input type="text" placeholder="E.g. Horizons">
+            <label style="padding-top: 0;">Server Name</label>
+            <input id="system_community" type="text" placeholder="E.g. Horizons" value="My Community">
 
-                <label>Server Address (Domain/IPv4)</label>
-                <input type="text" placeholder="domain.com or 0.0.0.0" value="<%= server_ipv4 %>">
+            <label>Server Address (Domain/IPv4)</label>
+            <input id="system_address" type="text" placeholder="domain.com or 0.0.0.0" value="<%= server_ipv4 %>">
 
-                <label>Server Directory (This Directory will Store all Torch Servers)</label>
-                <input type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
+            <label style="white-space: pre-line;">Server Directory (This Directory will Store all Torch Servers)
+            <span style="color: red;">This Directory will be created if it does not exist!</span></label>
+            <input id="system_directory" type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
 
-                <button onclick="system_next()">Next</button>
-            </form>
+            <button onclick="submit_configurations()">Submit</button>
 
         </div>
 

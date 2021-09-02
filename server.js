@@ -19,12 +19,12 @@ if (!fs.existsSync('local')) {
         }
     }
 
-    fs.writeFileSync('./local/toolbox.json', JSON.stringify(toolboxConfig, null, '\t'))
+    fs.writeFileSync('./local/system.json', JSON.stringify(toolboxConfig, null, '\t'))
 }
 
 //? Install Service
 if (process.argv[2] === 'install') {
-    return exec(`.\\util\\nssm.exe install "Sector Toolbox" ${__dirname}\\start.bat`, (err, stdout, stderr) => {
+    return exec(`.\\util\\nssm.exe install "Torch.js" ${__dirname}\\start.bat`, (err, stdout, stderr) => {
         if (err) return console.error(err)
     }).on('exit', code => {
         console.log(`Process Exit | Code ${code}`)
@@ -34,7 +34,7 @@ if (process.argv[2] === 'install') {
 //? Uninstall Service
 if (process.argv[2] === 'uninstall') {
     fs.rmdirSync('./local', { recursive: true })
-    return exec('.\\util\\nssm.exe remove "Sector Toolbox"', (err, stdout, stderr) => {
+    return exec('.\\util\\nssm.exe remove "Torch.js"', (err, stdout, stderr) => {
         if (err) return console.error(err)
     }).on('exit', code => {
         console.log(`Process Exit | Code ${code}`)
@@ -47,7 +47,7 @@ if (process.argv[2] === 'uninstall') {
 //! Load Configurations
 //!
 
-toolbox = require('./local/toolbox.json')
+toolbox = require('./local/system.json')
 
 
 
@@ -57,9 +57,12 @@ toolbox = require('./local/toolbox.json')
 
 //? Start Express
 const express = require('express')
+var multer = require('multer')
+var upload = multer()
 const app = express()
 const port = toolbox.web.port
 app.set('view engine', 'ejs')
+app.use(upload.array())
 app.use(express.static('assets'))
 app.listen(port, () => {
     if (!toolbox.web.setup_complete) exec('start http://localhost:' + port)
