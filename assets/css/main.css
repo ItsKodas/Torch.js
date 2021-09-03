@@ -1,0 +1,96 @@
+::selection {
+    background-color: #747780;
+}
+
+::-moz-selection {
+    background-color: #747780;
+}
+
+html {
+    background-color: rgb(37, 37, 37);
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+html * {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+}
+
+.top-title {
+    margin: .4em;
+    margin-left: 1em;
+}
+
+.card {
+    background-color: #3f4853;
+    margin: 1em;
+    padding: 1em;
+    padding-right: 1.75em;
+    position: relative;
+    border-radius: .3em;
+}
+
+.card * {
+    display: block;
+}
+
+.card h2 {
+    margin: 0;
+    margin-bottom: 1em;
+}
+
+.card label {
+    padding-top: 2em;
+    padding-bottom: .5em;
+}
+
+input {
+    background-color: #394047;
+    border-style: solid;
+    border-color: #5e6063;
+    outline: none;
+    border-radius: .2em;
+    font-size: 15pt;
+    padding: .2em;
+    width: 30em;
+}
+
+button {
+    background-color: #3c9fd8;
+    border-style: none;
+    border-radius: .3em;
+    font-size: 15pt;
+    margin-top: 1em;
+    cursor: pointer;
+    padding: .2em .4em;
+}
+
+.topnav {
+    background-color: #333;
+    overflow: hidden;
+}
+
+.topnav a {
+    float: left;
+    color: #f2f2f2;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.topnav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+.topnav a.active {
+    background-color: #2881e6;
+    color: white;
+}
