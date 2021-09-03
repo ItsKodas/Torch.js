@@ -31,7 +31,7 @@
             <input id="system_port" name="Web Port" type="number" placeholder="8080" value="8080" onkeyup="update_redirect()">
 
             <label style="white-space: pre-line;">Server Directory (This Directory will Store all Torch Servers)
-            <span style="color: red;">This Directory will be created if it does not exist!</span></label>
+                <span style="color: red;">This Directory will be created if it does not exist!</span></label>
             <input id="system_directory" name="Server Directory" type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
         </div>
 
@@ -47,6 +47,10 @@
 
             <label>Bot Token</label>
             <input id="discord_token" name="Bot Token" type="password" placeholder="TOKEN">
+
+            <label style="white-space: pre-line;">Default Administrator ID
+                <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-" target="_blank" style="color: lightgreen;">How to find your Discord ID</a></label>
+            <input id="discord_owner" name="Owner ID" type="number" placeholder="0123456789">
 
             <label>Please add the following redirect to your application:</label>
             <span id="redirect_url" style="color: tomato;">N/A</span>

@@ -106,29 +106,30 @@ app.use(async function(req, res, next) {
 
 
     if (!user) return res.redirect('/login')
-    fs.readFile(`./local/users/${user.id}.json`, function(err, data) {
-        var account
 
-        if (err) {
-            account = {
-                token: req.cookies.token,
-                user: user,
-                permissions: {
-                    administrator: false
+    req.account = await new Promise((resolve, reject) => {
+        fs.readFile(`./local/users/${user.id}.json`, function(err, data) {
+            var account
+
+            if (err) {
+                account = {
+                    token: req.cookies.token,
+                    discord: user
+                }
+            } else {
+                oldAccount = JSON.parse(data)
+                account = {
+                    token: req.cookies.token,
+                    discord: user
                 }
             }
-        } else {
-            oldAccount = JSON.parse(data)
-            account = {
-                token: req.cookies.token,
-                user: user,
-                permissions: oldAccount.permissions
-            }
-        }
-        fs.writeFile(`./local/users/${user.id}.json`, JSON.stringify(account, null, '\t'), function(err) { console.log(err) })
+            fs.promises.writeFile(`./local/users/${user.id}.json`, JSON.stringify(account, null, '\t'))
 
-        req.account = account
+            resolve(account)
+        })
     })
+
+    req.permissions = JSON.parse(await fs.promises.readFile(`./local/permissions.json`))
 
     next()
 

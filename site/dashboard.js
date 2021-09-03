@@ -1,8 +1,11 @@
+const Permissions = require('../functions/permissions')
+
 module.exports = function(app) {
 
-    /*app.get('/', function(req, res) {
-        console.log(req.account)
-            //req.account.permissions.administrator ? res.send('You have access') : res.send('You do not have access');
-    })*/
+    app.get('/', function(req, res) {
+        if (!Permissions.Check(req.account.discord, 'dashboard')) return res.status(403).send()
+
+        res.render('dashboard')
+    })
 
 }

@@ -33,10 +33,17 @@ module.exports = function(app, home_dir) {
             }
         }
 
+        var permissions = {
+            overrides: {
+                administrators: [data.discord_owner]
+            }
+        }
+
 
         if (!fs.existsSync(system_config.system.directory)) fs.mkdirSync(system_config.system.directory, { recursive: true }), console.log('Server Path did not exist so it has been created at: ' + system_config.system.directory)
 
         fs.writeFileSync('./local/system.json', JSON.stringify(system_config, null, '\t'))
+        fs.writeFileSync('./local/permissions.json', JSON.stringify(permissions, null, '\t'))
 
         res.status(200).send('Configurations Saved!')
         spawn('util/nssm.exe start Torch.js', null, { detached: true, stdio: 'ignore' })
