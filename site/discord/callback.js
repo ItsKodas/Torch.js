@@ -9,7 +9,7 @@ module.exports = function(app, SystemConfig) {
     app.get('/callback', function(req, res) {
         var data = {
             client_id: SystemConfig.discord.id,
-            redirect_uri: `http://${SystemConfig.web.address}:${SystemConfig.web.port}/discord/callback`,
+            redirect_uri: `http://${SystemConfig.web.address}:${SystemConfig.web.port}/callback`,
             scope: "identify",
             client_secret: SystemConfig.discord.secret,
             grant_type: "authorization_code",

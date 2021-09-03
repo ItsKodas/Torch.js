@@ -26,7 +26,7 @@ function submit_configurations() {
         .then(async response => {
             var text = await response.text()
             var status = response.status
-            if (status == 200) window.location.reload()
+            if (status == 200) window.location.href(`http://${$('#system_address').val()}:${$('#system_port').val()}`)
             else alert(text)
         })
         .catch(error => console.log('error', error))
