@@ -82,11 +82,9 @@ app.listen(port, () => {
 if (!SystemConfig.web.setup_complete) return require('./site/special/setup.js')(app, __dirname), console.log('Booting in Setup Mode.')
 
 app.use(async function(req, res, next) {
-    if (req.originalUrl === '/login') return next()
+    if (req.originalUrl === '/login' || req.originalUrl.includes('/discord/callback')) return next()
 
-    console.log('test')
-
-    var user = await new Promise((resolve, reject) => {
+    var user = JSON.parse(await new Promise((resolve, reject) => {
         var token = req.cookies.token
         if (!token) resolve(false)
 
@@ -104,11 +102,34 @@ app.use(async function(req, res, next) {
                 resolve(result)
             })
             .catch(error => console.log('error', error));
+    }))
+
+
+    fs.readFile(`./local/users/${user.id}.json`, function(err, data) {
+        var account
+
+        if (err) {
+            account = {
+                token: req.cookies.token,
+                user: user,
+                permissions: {
+                    administrator: false
+                }
+            }
+        } else {
+            console.log('data')
+            oldAccount = JSON.parse(data)
+            account = {
+                token: req.cookies.token,
+                user: user,
+                permissions: oldAccount.permissions
+            }
+        }
+
+        fs.writeFile(`./local/users/${user.id}.json`, JSON.stringify(account, null, '\t'), function(err) { console.log(err) })
     })
 
-    //if (!user) return res.redirect('/login')
-
-    console.log(user)
+    if (!user) return res.redirect('/login')
 
     next()
 
