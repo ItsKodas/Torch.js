@@ -35,7 +35,7 @@ module.exports = function(app, home_dir) {
         fs.writeFileSync('./local/system.json', JSON.stringify(system_config, null, '\t'))
 
         res.status(200).send('Configurations Saved!')
-        spawn('node server.js', null, { detached: true, stdio: 'ignore' })
+        spawn('util/nssm.exe start Torch.js', null, { detached: true, stdio: 'ignore' })
         process.exit()
     })
 
