@@ -33,3 +33,8 @@ function submit_configurations() {
 
     return false
 }
+
+function update_redirect() {
+    $('#redirect_url').html(`http://${$('#system_address').val()}:${$('#system_port').val()}/callback`)
+}
+update_redirect()
