@@ -27,10 +27,6 @@ html * {
     margin-left: 1em;
 }
 
-.inline * {
-    display: inline-block;
-}
-
 .card {
     background-color: #3f4853;
     margin: 1em;
@@ -71,7 +67,6 @@ button {
     border-radius: .3em;
     font-size: 15pt;
     margin-top: 1em;
-    float: right;
     cursor: pointer;
     padding: .2em .4em;
 }

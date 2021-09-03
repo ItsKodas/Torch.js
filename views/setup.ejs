@@ -6,33 +6,49 @@
 
     <title>Setup | Torch.js</title>
 
+    <link rel="stylesheet" href="css/setup.css">
+
     <%- include('partials/header.ejs') %>
 </head>
 
 <body>
 
-    <div class="inline" style="background-color: #3f4853; width: 100%;">
+    <div style="background-color: #3f4853; width: 100%; display: inline-block;">
         <h1 class="top-title">Setup</h1>
-        <i onclick="uninstall()" class="fas fa-trash-alt fa-2x" style="position: absolute; top: .5em; right: .5em; cursor: pointer;" title="Cancel Setup and Uninstall"></i>
+        <i onclick="submit_configurations()" class="fas fa-file-export fa-2x" style="position: absolute; top: .6em; right: .5em; cursor: pointer;" title="Save System Configurations"></i>
     </div>
 
-    <div class="inline" style="width: 100%;">
+    <div style="width: 100%; display: flex;">
 
         <div class="card">
             <h2>System</h2>
 
             <label style="padding-top: 0;">Server Name</label>
-            <input id="system_community" type="text" placeholder="E.g. Horizons" value="My Community">
+            <input id="system_community" name="Server Name" type="text" placeholder="E.g. Horizons" value="My Community">
 
             <label>Server Address (Domain/IPv4)</label>
-            <input id="system_address" type="text" placeholder="domain.com or 0.0.0.0" value="<%= server_ipv4 %>">
+            <input id="system_address" name="Server Address" type="text" placeholder="domain.com or 0.0.0.0" value="<%= server_ipv4 %>">
+
+            <label>Web Port</label>
+            <input id="system_port" name="Web Port" type="number" placeholder="8080" value="8080">
 
             <label style="white-space: pre-line;">Server Directory (This Directory will Store all Torch Servers)
             <span style="color: red;">This Directory will be created if it does not exist!</span></label>
-            <input id="system_directory" type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
+            <input id="system_directory" name="Server Directory" type="text" placeholder="C:/somewhere/on/your/server" value="<%= default_dir %>">
+        </div>
 
-            <button onclick="submit_configurations()">Submit</button>
+        <div class="card">
+            <h2 style="margin-bottom: .2em;">Discord</h2>
+            <a href="https://discord.com/developers/applications" target="_blank" style="padding-top: 0; color: tomato;">Create Application</a>
 
+            <label>Client ID</label>
+            <input id="discord_clientID" name="Client ID" type="text" placeholder="0123456789">
+
+            <label>Client Secret</label>
+            <input id="discord_secret" name="Client Secret" type="text" placeholder="SECRET">
+
+            <label>Bot Token</label>
+            <input id="discord_token" name="Bot Token" type="text" placeholder="TOKEN">
         </div>
 
     </div>

@@ -15,17 +15,21 @@ module.exports = function(app, home_dir) {
     app.post('/', (req, res) => {
 
         var data = req.body
-        var system = require('../local/system.json')
 
         var system_config = {
             web: {
                 setup_complete: true,
-                port: system.web.port,
+                port: data.system_port,
                 community: data.system_community,
                 address: data.system_address,
             },
             system: {
                 directory: data.system_directory
+            },
+            discord: {
+                id: data.discord_clientID,
+                secret: data.discord_secret,
+                token: data.discord_token
             }
         }
 

@@ -7,10 +7,14 @@ function submit_configurations() {
     if (!confirm("Finalize System Configurations?")) return
     var formdata = new FormData()
 
-    var data = $('[id^=system_]')
+    var missedFields = false
+    var data = $('input')
     for (id of data) {
+        if (!id.value) $(`#${id.id}`).css('border-color', 'red'), missedFields = true
+        else $(`#${id.id}`).css('border-color', 'green')
         formdata.append(id.id, id.value)
     }
+    if (missedFields) return
 
     var requestOptions = {
         method: 'POST',

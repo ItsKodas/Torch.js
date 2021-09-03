@@ -117,7 +117,6 @@ app.use(async function(req, res, next) {
                 }
             }
         } else {
-            console.log('data')
             oldAccount = JSON.parse(data)
             account = {
                 token: req.cookies.token,

@@ -3,10 +3,10 @@ var fetch = require('node-fetch');
 module.exports = function(app, SystemConfig) {
 
     app.get('/login', function(req, res) {
-        res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${SystemConfig.discord.id}&redirect_uri=http%3A%2F%2F${SystemConfig.web.address}%3A${SystemConfig.web.port}%2Fdiscord%2Fcallback&response_type=code&scope=identify`)
+        res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${SystemConfig.discord.id}&redirect_uri=http%3A%2F%2F${SystemConfig.web.address}%3A${SystemConfig.web.port}%2Fcallback&response_type=code&scope=identify`)
     })
 
-    app.get('/discord/callback', function(req, res) {
+    app.get('/callback', function(req, res) {
         var data = {
             client_id: SystemConfig.discord.id,
             redirect_uri: `http://${SystemConfig.web.address}:${SystemConfig.web.port}/discord/callback`,
