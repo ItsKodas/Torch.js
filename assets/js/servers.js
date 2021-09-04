@@ -1,3 +1,5 @@
+var socket = io()
+
 function createStandaloneInstance() {
     if (!confirm("Are you sure you want to create a New Standalone Instance?")) return
     var formdata = new FormData()
@@ -21,10 +23,17 @@ function createStandaloneInstance() {
         .then(async response => {
             var text = await response.text()
             var status = response.status
-            if (status == 200) window.location.reload()
-            else alert(text)
+            if (status == 200) {
+
+            } else alert(text)
         })
         .catch(error => console.log('error', error))
 
     return false
 }
+
+
+
+socket.on('server_install_progress', function(data) {
+    console.log(data)
+})
