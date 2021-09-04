@@ -5,12 +5,71 @@
     <title>Servers | Torch.js</title>
 
     <%- include('partials/master.ejs') %>
+
+    <style>
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: var(--black);
+            cursor: pointer;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.35s ease-in;
+        }
+
+        .modal.is-visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-dialog {
+            position: relative;
+            max-width: 800px;
+            max-height: 80vh;
+            border-radius: 5px;
+            background: var(--white);
+            overflow: auto;
+            cursor: default;
+        }
+
+        .modal-dialog > * {
+            padding: 1rem;
+        }
+
+        .modal-header,
+        .modal-footer {
+            background: var(--lightgray);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header .close-modal {
+            font-size: 1.5rem;
+        }
+
+        .modal p + p {
+            margin-top: 1rem;
+        }
+
+    </style>
+
 </head>
 
 <body>
 
     <div style="padding: 0 1em">
-        <button>Create Standalone Instance</button>
+        <button style="pointer-events: none; cursor: not-allowed;">Create Standalone Instance</button>
     </div>
 
     <div style="display: flex;">
@@ -41,8 +100,29 @@
         </div>
     </div>
 
+    <button type="button" class="open-modal" data-open="modal1">
+        launch test modal
+    </button>
 </body>
 
+
+<div class="modal" id="modal1">
+    <div class="modal-dialog">
+      <header class="modal-header">
+        header
+        <button class="close-modal" aria-label="close modal" data-close>
+          ✕  
+        </button>
+      </header>
+      <section class="modal-content">
+        <p><strong>Press ✕, ESC, or click outside of the modal to close it</strong></p>
+        <p>content</p>
+      </section>
+      <footer class="modal-footer">
+        footer
+      </footer>
+    </div>
+  </div>
 
 
 <footer>
@@ -50,5 +130,35 @@
     <script src="/js/servers.js"></script>
 </footer>
 
+<script>
+    const openEls = document.querySelectorAll("[data-open]");
+    const closeEls = document.querySelectorAll("[data-close]");
+    const isVisible = "is-visible";
+
+    for (const el of openEls) {
+        el.addEventListener("click", function() {
+            const modalId = this.dataset.open;
+            document.getElementById(modalId).classList.add(isVisible);
+        });
+    }
+
+    for (const el of closeEls) {
+        el.addEventListener("click", function() {
+            this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+        });
+    }
+
+    document.addEventListener("click", e => {
+        if (e.target == document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+
+    document.addEventListener("keyup", e => {
+        if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+</script>
 
 </html>
