@@ -123,7 +123,7 @@ app.use(async function(req, res, next) {
                     discord: user
                 }
             }
-            fs.promises.writeFile(`./local/users/${user.id}.json`, JSON.stringify(account, null, '\t'))
+            //fs.promises.writeFile(`./local/users/${user.id}.json`, JSON.stringify(account, null, '\t'))
 
             resolve(account)
         })

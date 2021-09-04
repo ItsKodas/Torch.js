@@ -62,9 +62,9 @@ input {
 }
 
 button {
-    background-color: #3c9fd8;
+    background-color: #2881e6;
     border-style: none;
-    border-radius: .3em;
+    border-radius: .1em;
     font-size: 15pt;
     margin-top: 1em;
     cursor: pointer;
