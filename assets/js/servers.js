@@ -25,6 +25,7 @@ function createStandaloneInstance() {
             var status = response.status
             if (status == 200) {
                 $('[id^="createSA_"]').hide()
+                $('[id^="installSA_"]').show()
             } else alert(text)
         })
         .catch(error => console.log('error', error))
@@ -32,10 +33,16 @@ function createStandaloneInstance() {
     return false
 }
 
-$('[id^="createSA_"]').hide()
-
-
 
 socket.on('server_install_progress', function(data) {
-    console.log(data)
+    if (data.time.includes('/')) data.time = '...Extracting Files'
+    $('#installSA_progress').attr('value', data.percent)
+    $('#installSA_progress_percent').html(`${data.percent}%`)
+    $('#installSA_progress_time').html(data.time)
+})
+
+socket.on('server_install_complete', function(data) {
+    alert('Instance Successfully Installed | Code: ' + data.code)
+    $('[id^="createSA_"]').show()
+    $('[id^="installSA_"]').hide()
 })

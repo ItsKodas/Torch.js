@@ -100,14 +100,6 @@ progress {
     height: 2em;
 }
 
-.row {
-    white-space: nowrap;
-}
-
-.row>div {
-    display: inline-block;
-}
-
 .modal {
     position: fixed;
     top: 0;

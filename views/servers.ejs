@@ -11,11 +11,11 @@
 <body>
 
     <div style="padding: 0 1em">
-        <button style="pointer-events: none; cursor: not-allowed;">Create Standalone Instance</button>
+        <button onclick="$('#create_standalone_sector').is(':visible') ? $('#create_standalone_sector').hide() : $('#create_standalone_sector').show()">Create Standalone Instance</button>
     </div>
 
     <div style="display: flex;">
-        <div class="card" id="create_standalone_sector">
+        <div class="card" id="create_standalone_sector" style="display: none;">
             <h2>Standalone Instance</h2>
             <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
 
@@ -24,18 +24,18 @@
                 <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol">
             </div>
 
-            <div id="installSA_progress">
-                <progress id="installSA_progress" value="50" max="100" style="width: 30em;"></progress>
-                <div class="row">
-                    <p id="installSA_progress_percent">50%</p>
-                    <p id="installSA_progress_time" style="direction: rtl;">10s</p>
+            <div id="installSA_options" style="display: none;">
+                <progress id="installSA_progress" value="0" max="100" style="width: 30em;"></progress>
+                <div style="white-space: nowrap;">
+                    <p id="installSA_progress_percent" style="display: inline-block;">0%</p>
+                    <p id="installSA_progress_time" style="direction: rtl; display: inline-block; width: 93%;">...Loading</p>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <button type="button" class="open-modal" data-open="modal1">
+    <button style="display: none;" type="button" class="open-modal" data-open="modal1">
         launch test modal
     </button>
 </body>
