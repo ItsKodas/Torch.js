@@ -5,32 +5,95 @@
     <title>Servers | Torch.js</title>
 
     <%- include('partials/master.ejs') %>
+
 </head>
 
 <body>
 
     <div style="padding: 0 1em">
-        <button>Create Standalone Instance</button>
+        <button onclick="$('#create_standalone_sector').is(':visible') ? $('#create_standalone_sector').fadeOut('fast') : $('#create_standalone_sector').fadeIn('fast')">Create Standalone Instance</button>
     </div>
 
     <div style="display: flex;">
-        <div class="card" id="create_standalone_sector">
+        <div class="card" id="create_standalone_sector" style="display: none;">
             <h2>Standalone Instance</h2>
-            <button style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
+            <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
 
-            <label style="padding-top: 0;">Instance Name</label>
-            <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol">
+            <div id="createSA_options">
+                <label style="padding-top: 0;">Instance Name</label>
+                <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol">
+            </div>
+
+            <div id="installSA_options" style="display: none;">
+                <progress id="installSA_progress" value="0" max="100" style="width: 30em;"></progress>
+                <div style="white-space: nowrap;">
+                    <p id="installSA_progress_percent" style="display: inline-block;">0%</p>
+                    <p id="installSA_progress_time" style="direction: rtl; display: inline-block; width: 93%;">...Loading</p>
+                </div>
+            </div>
 
         </div>
     </div>
 
+    <button style="display: none;" type="button" class="open-modal" data-open="modal1">
+        launch test modal
+    </button>
 </body>
 
 
+<div class="modal" id="modal1">
+    <div class="modal-dialog">
+        <header class="modal-header">
+            header
+            <button class="close-modal" aria-label="close modal" data-close>
+          ✕  
+        </button>
+        </header>
+        <section class="modal-content">
+            <p><strong>Press ✕, ESC, or click outside of the modal to close it</strong></p>
+            <p>content</p>
+        </section>
+        <footer class="modal-footer">
+            footer
+        </footer>
+    </div>
+</div>
+
 
 <footer>
-    <script src="js/servers.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/servers.js"></script>
 </footer>
 
+<script>
+    const openEls = document.querySelectorAll("[data-open]");
+    const closeEls = document.querySelectorAll("[data-close]");
+    const isVisible = "is-visible";
+
+    for (const el of openEls) {
+        el.addEventListener("click", function() {
+            const modalId = this.dataset.open;
+            document.getElementById(modalId).classList.add(isVisible);
+        });
+    }
+
+    for (const el of closeEls) {
+        el.addEventListener("click", function() {
+            this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+        });
+    }
+
+    document.addEventListener("click", e => {
+        if (e.target == document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+
+    document.addEventListener("keyup", e => {
+        if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+</script>
 
 </html>

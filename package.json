@@ -6,8 +6,10 @@
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
     "multer": "^1.4.3",
     "node-fetch": "^2.6.1",
-    "public-ip": "^4.0.4"
+    "public-ip": "^4.0.4",
+    "socket.io": "^4.2.0"
   }
 }

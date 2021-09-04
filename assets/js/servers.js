@@ -1,3 +1,5 @@
+var socket = io()
+
 function createStandaloneInstance() {
     if (!confirm("Are you sure you want to create a New Standalone Instance?")) return
     var formdata = new FormData()
@@ -21,10 +23,26 @@ function createStandaloneInstance() {
         .then(async response => {
             var text = await response.text()
             var status = response.status
-            if (status == 200) window.location.reload()
-            else alert(text)
+            if (status == 200) {
+                $('[id^="createSA_"]').hide()
+                $('[id^="installSA_"]').show()
+            } else alert(text)
         })
         .catch(error => console.log('error', error))
 
     return false
 }
+
+
+socket.on('server_install_progress', function(data) {
+    if (data.time.includes('/')) data.time = '...Extracting Files'
+    $('#installSA_progress').attr('value', data.percent)
+    $('#installSA_progress_percent').html(`${data.percent}%`)
+    $('#installSA_progress_time').html(data.time)
+})
+
+socket.on('server_install_complete', function(data) {
+    alert('Instance Successfully Installed | Code: ' + data.code)
+    $('[id^="createSA_"]').show()
+    $('[id^="installSA_"]').hide()
+})

@@ -74,9 +74,16 @@ app.set('view engine', 'ejs')
 app.use(upload.array())
 app.use(require('cookie-parser')())
 app.use(express.static('assets'))
-app.listen(port, () => {
+
+//? Socket.io
+const http = require('http')
+const server = http.createServer(app)
+const { Server } = require("socket.io")
+const io = new Server(server)
+server.listen(SystemConfig.web.port, () => {
+    console.log(`listening on ${SystemConfig.web.address}:${SystemConfig.web.port}`)
     if (!SystemConfig.web.setup_complete) exec('start http://localhost:' + port)
-})
+});
 
 //? Setup Pages
 if (!SystemConfig.web.setup_complete) return require('./site/special/setup.js')(app, __dirname), console.log('Booting in Setup Mode.')
@@ -139,7 +146,7 @@ fs.readdir('./site', (err, files) => {
     if (err) return console.log(err)
     else {
         for (file of files) {
-            if (file.includes('.js')) require('./site/' + file)(app, SystemConfig)
+            if (file.includes('.js')) require('./site/' + file)(app, SystemConfig, io)
         }
 
         require('./site/discord/callback.js')(app, SystemConfig)

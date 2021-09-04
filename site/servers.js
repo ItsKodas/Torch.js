@@ -4,7 +4,9 @@ const Permissions = require('../functions/permissions')
 
 const fs = require('fs')
 
-module.exports = function(app, SystemConfig) {
+module.exports = async function(app, SystemConfig, io) {
+
+    var socket = await io.on('connection', async(socket) => socket)
 
     app.get('/servers', async function(req, res) {
         if (!Permissions.Check(req.account.discord, 'servers')) return res.status(403).send()
@@ -28,13 +30,31 @@ module.exports = function(app, SystemConfig) {
 
         await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}`).catch(err => res.status(500).send(err))
 
-        spawn(`.\\resources\\update_torch.bat ${name} ${SystemConfig.system.directory.split(':')[0]} "${SystemConfig.system.directory}\\${name}"`, (err, stdout, stderr) => {
-            if (err) return console.error(err)
-            console.log(stdout)
+        var sectorInstaller = spawn(".\\resources\\update_torch.bat", [name, SystemConfig.system.directory.split(':')[0], `${SystemConfig.system.directory}\\${name}`])
+        sectorInstaller.stdout.on('data', data => {
+            console.log('Log', data.toString())
         })
+        sectorInstaller.stderr.on('data', data => {
+            var data = data.toString()
+            if (!data.includes('%')) return
 
+            var packet = data.split(' ')
+
+            var percent, time
+
+            for (value of packet) {
+                if (value.includes('%')) percent = value
+                if (value.includes('\r\n')) time = value
+            }
+            percent = percent.replace('%', '')
+            time = time.replace('\r\n', '')
+
+            socket.emit('server_install_progress', { percent, time })
+        })
+        sectorInstaller.on('close', code => socket.emit('server_install_complete', { code }))
 
         return res.status(200).send()
+
     })
 
 }
