@@ -23,6 +23,8 @@ module.exports = async function(app, SystemConfig, io) {
     app.post('/servers/create/standalone', async function(req, res) {
         if (!Permissions.Check(req.account.discord, 'create_instance')) return res.status(403).send("You do not have permission to do this.")
 
+        return res.status(200).send()
+
         var name = req.body.instance_name.trim()
 
         if (!name.match(/^[a-zA-Z0-9-_]+$/)) return res.status(400).send("Instance name contains invalid characters.")
@@ -46,6 +48,7 @@ module.exports = async function(app, SystemConfig, io) {
                 if (value.includes('%')) percent = value
                 if (value.includes('\r\n')) time = value
             }
+            percent = percent.replace('%', '')
             time = time.replace('\r\n', '')
 
             console.log(percent, time)

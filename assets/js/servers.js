@@ -24,13 +24,15 @@ function createStandaloneInstance() {
             var text = await response.text()
             var status = response.status
             if (status == 200) {
-
+                $('[id^="createSA_"]').hide()
             } else alert(text)
         })
         .catch(error => console.log('error', error))
 
     return false
 }
+
+$('[id^="createSA_"]').hide()
 
 
 

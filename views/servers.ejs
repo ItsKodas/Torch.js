@@ -16,10 +16,27 @@
     <div style="display: flex;">
         <div class="card" id="create_standalone_sector">
             <h2>Standalone Instance</h2>
-            <button style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
+            <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
 
-            <label style="padding-top: 0;">Instance Name</label>
-            <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol">
+            <div id="createSA_options">
+                <label style="padding-top: 0;">Instance Name</label>
+                <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol">
+            </div>
+
+            <div id="installSA_progress">
+                <progress id="installSA_progress" value="50" max="100" style="width: 30em;"></progress>
+                <div class="row">
+
+                    <div>
+                        <p id="installSA_progress_percent">50%</p>
+                    </div>
+
+                    <div>
+                        <p id="installSA_progress_time" style="direction: rtl;">10s</p>
+                    </div>
+
+                </div>
+            </div>
 
         </div>
     </div>

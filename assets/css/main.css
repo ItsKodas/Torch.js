@@ -94,3 +94,16 @@ button {
     background-color: #2881e6;
     color: white;
 }
+
+progress {
+    width: 100%;
+    height: 2em;
+}
+
+.row {
+    white-space: nowrap;
+}
+
+.row>div {
+    display: inline-block;
+}
