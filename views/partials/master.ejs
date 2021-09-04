@@ -12,18 +12,13 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
 
 
-
 <link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/modals.css">
-
-<script src="js/modals.js"></script>
-
 
 
 <nav class="topnav">
     <a href="/">Dashboard</a>
     <a href="/servers">Servers</a>
-    <a href="/discord">Discord</a>
+    <a hidden href="/discord">Discord</a>
 
     <script>
         $(function() {
@@ -32,7 +27,3 @@
         })
     </script>
 </nav>
-
-
-
-<%- include('modals.ejs') %>
