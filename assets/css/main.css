@@ -110,7 +110,7 @@ progress {
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    background: var(--black);
+    background: #00000070;
     cursor: pointer;
     visibility: hidden;
     opacity: 0;
