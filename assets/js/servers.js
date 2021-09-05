@@ -1,7 +1,6 @@
 var socket = io()
 
 function createStandaloneInstance() {
-    if (!confirm("Are you sure you want to create a New Standalone Instance?")) return
     var formdata = new FormData()
 
     var missedFields = false
