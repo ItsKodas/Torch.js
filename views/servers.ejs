@@ -17,7 +17,7 @@
     <div style="display: flex;">
         <div class="card" id="create_standalone_sector" style="display: none;">
             <h2>Standalone Instance</h2>
-            <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" onclick="createStandaloneInstance()">Create</button>
+            <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #E2563E" class="open-modal" data-open="modal1">Create</button>
 
             <div id="createSA_options">
                 <label style="padding-top: 0;">Instance Name</label>
@@ -40,25 +40,23 @@
     </button>
 </body>
 
-
 <div class="modal" id="modal1">
     <div class="modal-dialog">
         <header class="modal-header">
-            header
-            <button class="close-modal" aria-label="close modal" data-close>
-          ✕  
-        </button>
+            <strong><u>Create Standalone Instance</u></strong>
+            <button style="margin-top: -0.2em;" class="close-modal" aria-label="close modal" data-close>✕</button>
         </header>
         <section class="modal-content">
-            <p><strong>Press ✕, ESC, or click outside of the modal to close it</strong></p>
-            <p>content</p>
+            <p>Are you sure you want to create a new standalone instance?</p>
+            <br>
+            <br>
         </section>
         <footer class="modal-footer">
-            footer
+            <button style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
+            <button id="createSA_createButton" style="position: flex; float: right; margin-top: -2em; background-color: #108d00" onclick="createStandaloneInstance()">Confirm</button>
         </footer>
     </div>
 </div>
-
 
 <footer>
     <script src="/socket.io/socket.io.js"></script>

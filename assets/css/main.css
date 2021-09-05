@@ -127,7 +127,7 @@ progress {
     max-width: 800px;
     max-height: 80vh;
     border-radius: 5px;
-    background: var(--white);
+    background: #323336;
     overflow: auto;
     cursor: default;
 }
@@ -138,7 +138,7 @@ progress {
 
 .modal-header,
 .modal-footer {
-    background: var(--lightgray);
+    background: #323336;
 }
 
 .modal-header {
