@@ -50,7 +50,8 @@
 
     function prepareModal_Main(header, message) {
         var modal = $('#modal_main')
-        modal.children('[Strong]').html(header)
+        modal.find('[Strong]').html(header)
+        console.log(modal.find('[Strong]'))
     } prepareModal_Main('Yeet', 'test this epic shit!')
 </script>
 <!--Modals End-->

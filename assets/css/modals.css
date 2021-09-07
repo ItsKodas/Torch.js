@@ -9,7 +9,7 @@
     justify-content: center;
     padding: 1rem;
     background: #00000070;
-    cursor: pointer;
+    cursor: default;
     visibility: hidden;
     opacity: 0;
     transition: all 0.35s ease-in;

@@ -1,9 +1,11 @@
 @echo off
 
+SET torchjs=%cd%
+
 %2:
 cd %3
 
-C:/Applications/wget.exe https://build.torchapi.net/job/Torch/job/Torch/job/master/lastSuccessfulBuild/artifact/bin/torch-server.zip -O torch-server.zip
+"%torchjs%\util\wget.exe" https://build.torchapi.net/job/Torch/job/Torch/job/master/lastSuccessfulBuild/artifact/bin/torch-server.zip -O torch-server.zip
 powershell Expand-Archive -Force torch-server.zip ./
 del torch-server.zip
 
