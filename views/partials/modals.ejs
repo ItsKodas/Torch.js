@@ -3,7 +3,7 @@
     <div class="modal-dialog">
         <header class="modal-header">
             <strong>Header</strong>
-            <button style="margin-top: -0.2em;" class="close-modal" aria-label="close modal" data-close>✕</button>
+            <button style="margin-top: -0.2em; margin-left: 1em; background-color: rgb(238, 78, 67);" class="close-modal" aria-label="close modal" data-close>✕</button>
         </header>
         <section class="modal-content">
             <p>Message</p>
@@ -50,8 +50,8 @@
 
     function prepareModal_Main(header, message) {
         var modal = $('#modal_main')
-        modal.find('[Strong]').html(header)
-        console.log(modal.find('[Strong]'))
-    } prepareModal_Main('Yeet', 'test this epic shit!')
+        modal.find('Strong').html(header)
+        modal.find('p').html(message)
+    }
 </script>
 <!--Modals End-->
