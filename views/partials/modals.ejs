@@ -1,0 +1,57 @@
+<!--Modals-->
+<div class="modal" id="modal_main">
+    <div class="modal-dialog">
+        <header class="modal-header">
+            <strong>Header</strong>
+            <button style="margin-top: -0.2em; margin-left: 1em; background-color: rgb(238, 78, 67);" class="close-modal" aria-label="close modal" data-close>✕</button>
+        </header>
+        <section class="modal-content">
+            <p>Message</p>
+            <br>
+            <br>
+        </section>
+        <footer class="modal-footer">
+            <button style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
+            <button id="modal_main_confirm" style="position: flex; float: right; margin-top: -2em; background-color: #21bd0d" onclick="createStandaloneInstance()" data-close>Confirm</button>
+        </footer>
+    </div>
+</div>
+
+<script>
+    const openEls = document.querySelectorAll("[data-open]");
+    const closeEls = document.querySelectorAll("[data-close]");
+    const isVisible = "is-visible";
+
+    for (const el of openEls) {
+        el.addEventListener("click", function() {
+            const modalId = this.dataset.open;
+            document.getElementById(modalId).classList.add(isVisible);
+        });
+    }
+
+    for (const el of closeEls) {
+        el.addEventListener("click", function() {
+            this.parentElement.parentElement.parentElement.classList.remove(isVisible);
+        });
+    }
+
+    document.addEventListener("click", e => {
+        if (e.target == document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+
+    document.addEventListener("keyup", e => {
+        if (e.key == "Escape" && document.querySelector(".modal.is-visible")) {
+            document.querySelector(".modal.is-visible").classList.remove(isVisible);
+        }
+    });
+
+
+    function prepareModal_Main(header, message) {
+        var modal = $('#modal_main')
+        modal.find('Strong').html(header)
+        modal.find('p').html(message)
+    }
+</script>
+<!--Modals End-->
