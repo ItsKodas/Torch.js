@@ -5,6 +5,8 @@
     <title>Servers | Torch.js</title>
 
     <%- include('partials/master.ejs') %>
+
+    <link rel="stylesheet" href="/assets/css/elements/setup_table.css" />
 </head>
 
 <body>
@@ -94,8 +96,11 @@
             </table>
         </section>
 
-        <section id="setup_installing" class="modal-content" style="margin-top: 2em; display: none;">
-            <progress id="setup_progress" value="0" max="100" style="width: 100%"></progress>
+        <section id="setup_installing" class="modal-content" style="margin-top: 2em;">
+            <p>Download Files</p><div class="loader"></div>
+            <p>Extract Files</p><div class="loader"></div>
+            <p>Import World Preset</p><div class="loader"></div>
+            <p>Import Config Preset</p><div class="loader"></div>
         </section>
 
         <footer class="modal-footer">
@@ -109,7 +114,7 @@
 
     <footer>
         <script src="/socket.io/socket.io.js"></script>
-        <script src="/js/servers.js"></script>
+        <script src="/assets/js/servers.js"></script>
     </footer>
 
 </html>

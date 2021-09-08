@@ -43,7 +43,7 @@ function createNewServer() {
 
 socket.on('server_install_progress', function(data) {
     if (data.time.includes('/')) return $('#setup_title').html('Extracting Files...')
-    $('#setup_title').html(`Downloading | ${data.percent}% | ${data.time}`)
+    $('#setup_title').html(`Downloading Files (${data.time})`)
     $('#setup_progress').attr('value', data.percent)
 })
 

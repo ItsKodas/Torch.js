@@ -71,7 +71,7 @@ const port = SystemConfig.web.port
 app.set('view engine', 'ejs')
 app.use(upload.array())
 app.use(require('cookie-parser')())
-app.use(express.static('assets'))
+app.use('/assets', express.static('assets'))
 app.use('/presets', express.static('presets'))
 
 //? Socket.io
