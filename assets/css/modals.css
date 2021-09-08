@@ -22,9 +22,9 @@
 
 .modal-dialog {
     position: relative;
-    max-width: 800px;
+    max-width: 80em;
     max-height: 80vh;
-    border-radius: 5px;
+    border-radius: .2em;
     background: #323336;
     overflow: auto;
     cursor: default;
@@ -51,4 +51,12 @@
 
 .modal p+p {
     margin-top: 1rem;
+}
+
+.modal-content {
+    margin-bottom: 3em;
+}
+
+.modal input {
+    width: 50%;
 }
