@@ -24,7 +24,6 @@ module.exports = async function (app, SystemConfig, io) {
 
             var nexus = await fs.existsSync('resources/nexus')
 
-            console.log(data)
             res.render('servers', { data, nexus })
         } catch (e) { return console.log(e), res.send(e) }
 
@@ -32,10 +31,10 @@ module.exports = async function (app, SystemConfig, io) {
 
 
 
-    app.post('/servers/create/standalone', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'create_instance')) return res.status(403).send("You do not have permission to do this.")
+    app.post('/servers/create', async function (req, res) {
+        if (!Permissions.Check(req.account.discord, 'create_server')) return res.status(403).send("You do not have permission to do this.")
 
-        var name = req.body.instance_name.trim()
+        var name = req.body.server_name.trim()
 
         if (!name.match(/^[a-zA-Z0-9-_]+$/)) return res.status(400).send("Instance name contains invalid characters.")
         if (fs.existsSync(`${SystemConfig.system.directory}\\${name}`)) return res.status(400).send("Instance name is already in use.")

@@ -37,10 +37,10 @@
 <div class="modal is-visible" id="modal_new_server">
     <div class="modal-dialog" style="width: 80em; height: fit-content;">
         <header class="modal-header">
-            <h1 style="margin-bottom: -.5em;">New Server</h1>
+            <h1 id="setup_title" style="margin-bottom: -.5em;">New Server</h1>
         </header>
-        <section class="modal-content">
 
+        <section id="setup_content" class="modal-content">
             <h3>General Configurations</h3>
             <table class="setup_table" style="border-color: white; width: 100%;">
                 <tr>
@@ -92,11 +92,15 @@
                     </td>
                 </tr>
             </table>
-
         </section>
+
+        <section id="setup_installing" class="modal-content" style="margin-top: 2em; display: none;">
+            <progress id="setup_progress" value="0" max="100" style="width: 100%"></progress>
+        </section>
+
         <footer class="modal-footer">
-            <button style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
-            <button style="position: flex; float: right; margin-top: -2em; background-color: #3b97e2" onclick="createNewServer()" data-close>Create</button>
+            <button id="setup_cancel" style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
+            <button id="setup_next" style="position: flex; float: right; margin-top: -2em; background-color: #3b97e2" onclick="createNewServer()">Create</button>
         </footer>
     </div>
 </div>

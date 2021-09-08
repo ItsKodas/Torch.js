@@ -4,7 +4,7 @@ function createNewServer() {
     var formdata = new FormData()
 
     var missedFields = false
-    var data = $('input[id^="server_"]')
+    var data = $('[id^="server_"]')
     for (id of data) {
         if (!id.value) $(`#${id.id}`).css('border-color', 'red'), missedFields = true
         else $(`#${id.id}`).css('border-color', 'green')
@@ -18,13 +18,21 @@ function createNewServer() {
         redirect: 'follow'
     };
 
-    fetch("/servers/create/standalone", requestOptions)
+    fetch("/servers/create", requestOptions)
         .then(async response => {
             var text = await response.text()
             var status = response.status
             if (status == 200) {
-                $('[id^="createSA_"]').hide()
-                $('[id^="installSA_"]').show()
+
+                $('#setup_cancel').fadeOut('slow')
+                $('#setup_next').fadeOut('slow')
+                $('#setup_content').fadeOut('slow')
+
+
+                $('#setup_title').html('Downloading Files...')
+                $('#setup_installing').fadeIn('slow')
+
+
             } else alert(text)
         })
         .catch(error => console.log('error', error))
@@ -34,14 +42,11 @@ function createNewServer() {
 
 
 socket.on('server_install_progress', function(data) {
-    if (data.time.includes('/')) data.time = '...Extracting Files'
-    $('#installSA_progress').attr('value', data.percent)
-    $('#installSA_progress_percent').html(`${data.percent}%`)
-    $('#installSA_progress_time').html(data.time)
+    if (data.time.includes('/')) return $('#setup_title').html('Extracting Files...')
+    $('#setup_title').html(`Downloading | ${data.percent}% | ${data.time}`)
+    $('#setup_progress').attr('value', data.percent)
 })
 
 socket.on('server_install_complete', function(data) {
-    alert('Instance Successfully Installed | Code: ' + data.code)
-    $('[id^="createSA_"]').show()
-    $('[id^="installSA_"]').hide()
+    alert('Sever Successfully Installed | Code: ' + data.code)
 })
