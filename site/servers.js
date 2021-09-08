@@ -4,23 +4,35 @@ const Permissions = require('../functions/permissions')
 
 const fs = require('fs')
 
-module.exports = async function(app, SystemConfig, io) {
+module.exports = async function (app, SystemConfig, io) {
 
-    var socket = await io.on('connection', async(socket) => socket)
+    var socket = await io.on('connection', async (socket) => socket)
 
-    app.get('/servers', async function(req, res) {
+    app.get('/servers', async function (req, res) {
         if (!Permissions.Check(req.account.discord, 'servers')) return res.status(403).send()
 
-        var servers = await fs.promises.readdir(SystemConfig.system.directory)
+        var data = {
+            servers: [],
+            presets: {}
+        }
 
-        console.log(servers)
+        try {
+            data.servers = await fs.promises.readdir(SystemConfig.system.directory)
 
-        res.render('servers', { servers })
+            data.presets['worlds'] = await fs.promises.readdir('./presets/instance/world')
+            data.presets['configs'] = await fs.promises.readdir('./presets/instance/config')
+
+            var nexus = await fs.existsSync('resources/nexus')
+
+            console.log(data)
+            res.render('servers', { data, nexus })
+        } catch (e) { return console.log(e), res.send(e) }
+
     })
 
 
 
-    app.post('/servers/create/standalone', async function(req, res) {
+    app.post('/servers/create/standalone', async function (req, res) {
         if (!Permissions.Check(req.account.discord, 'create_instance')) return res.status(403).send("You do not have permission to do this.")
 
         var name = req.body.instance_name.trim()

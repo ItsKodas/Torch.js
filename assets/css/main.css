@@ -111,6 +111,7 @@ select {
 
 option {
     background-color: #3f4244;
+    border-radius: 50em;
 }
 
 option:hover {

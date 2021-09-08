@@ -1,10 +1,10 @@
 var socket = io()
 
-function createStandaloneInstance() {
+function createNewServer() {
     var formdata = new FormData()
 
     var missedFields = false
-    var data = $('input[id^="instance_"]')
+    var data = $('input[id^="server_"]')
     for (id of data) {
         if (!id.value) $(`#${id.id}`).css('border-color', 'red'), missedFields = true
         else $(`#${id.id}`).css('border-color', 'green')

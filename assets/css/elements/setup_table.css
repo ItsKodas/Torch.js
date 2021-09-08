@@ -1,5 +1,5 @@
 .setup_table td {
-    padding: 1em;
+    padding: 1em 0;
 }
 
 .setup_table td * {
@@ -14,6 +14,6 @@
     display: inline;
 }
 
-.setup_table input {
+.setup_table input, select {
     width: 90%;
 }

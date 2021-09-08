@@ -17,52 +17,6 @@
     </div>
 </div>
 
-<div class="modal is-visible" id="modal_new_server">
-    <div class="modal-dialog" style="width: 80em; height: fit-content;">
-        <header class="modal-header">
-            <h1>New Server</h1>
-        </header>
-        <section class="modal-content">
-
-            <table class="setup_table" border="solid" style="border-color: white; width: 100%;">
-                <tr>
-                    <td>
-                        <label>Server Name</label>
-                        <input id="server_name" type="text" placeholder="E.g. Solar System">
-                    </td>
-                    <td>
-                        <label>Server Type <span style="color: red;">- Nexus is Required for Sectoring!</span></label>
-                        <select id="server_type" onchange="updateServerType()">
-                            <option selected>Standalone</option>
-                            <option>Lobby</option>
-                            <option>Normal Sector</option>
-                            <option>General Sector</option>
-                        </select>
-
-
-
-                        <script style="display: none;">
-                            function updateServerType() {
-                                if ($('#server_type').value !== "Standalone") {
-
-                                }
-                            }
-                        </script>
-                    </td>
-                </tr>
-                <tr>
-                    <td>test2</td>
-                </tr>
-            </table>
-
-        </section>
-        <footer class="modal-footer">
-            <button style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
-            <button style="position: flex; float: right; margin-top: -2em; background-color: #21bd0d" onclick="createStandaloneInstance()" data-close>Confirm</button>
-        </footer>
-    </div>
-</div>
-
 <script>
     const openEls = document.querySelectorAll("[data-open]");
     const closeEls = document.querySelectorAll("[data-close]");
