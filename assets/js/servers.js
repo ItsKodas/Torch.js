@@ -24,13 +24,13 @@ function createNewServer() {
             var status = response.status
             if (status == 200) {
 
-                $('#setup_cancel').fadeOut('slow')
-                $('#setup_next').fadeOut('slow')
-                $('#setup_content').fadeOut('slow')
+                $('#setup_cancel').hide()
+                $('#setup_next').hide()
+                $('#setup_content').hide()
 
 
                 $('#setup_title').html('Downloading Files...')
-                $('#setup_installing').fadeIn('slow')
+                $('#setup_installing').show()
 
 
             } else alert(text)
@@ -41,12 +41,16 @@ function createNewServer() {
 }
 
 
-socket.on('server_install_progress', function(data) {
-    if (data.time.includes('/')) return $('#setup_title').html('Extracting Files...')
-    $('#setup_title').html(`Downloading Files (${data.time})`)
-    $('#setup_progress').attr('value', data.percent)
+socket.on('server_install_download', function (data) {
+    if (!data.time.includes('/')) {
+        $('#setup_title').html(`Downloading Files... ${data.time}`)
+        $('#setup_download_files').find('p').html(`Downloading Files... (${data.percent}%)`)
+    } else {
+        $('#setup_title').html('Extracting Files...')
+        $('#setup_download_files').html(`<p>Files Downloaded! (100%)</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+    }
 })
 
-socket.on('server_install_complete', function(data) {
-    alert('Sever Successfully Installed | Code: ' + data.code)
+socket.on('server_install_extract', () => {
+    $('#setup_extract_files').html(`<p>Files Extracted!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })

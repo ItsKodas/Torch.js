@@ -60,9 +60,9 @@ module.exports = async function (app, SystemConfig, io) {
             percent = percent.replace('%', '')
             time = time.replace('\r\n', '')
 
-            socket.emit('server_install_progress', { percent, time })
+            socket.emit('server_install_download', { percent, time })
         })
-        sectorInstaller.on('close', code => socket.emit('server_install_complete', { code }))
+        sectorInstaller.on('close', code => socket.emit('server_install_extract'))
 
         return res.status(200).send()
 
