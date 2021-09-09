@@ -1,10 +1,10 @@
 var socket = io()
 
-function createStandaloneInstance() {
+function createNewServer() {
     var formdata = new FormData()
 
     var missedFields = false
-    var data = $('input[id^="instance_"]')
+    var data = $('[id^="server_"]')
     for (id of data) {
         if (!id.value) $(`#${id.id}`).css('border-color', 'red'), missedFields = true
         else $(`#${id.id}`).css('border-color', 'green')
@@ -18,13 +18,21 @@ function createStandaloneInstance() {
         redirect: 'follow'
     };
 
-    fetch("/servers/create/standalone", requestOptions)
+    fetch("/servers/create", requestOptions)
         .then(async response => {
             var text = await response.text()
             var status = response.status
             if (status == 200) {
-                $('[id^="createSA_"]').hide()
-                $('[id^="installSA_"]').show()
+
+                $('#setup_cancel').hide()
+                $('#setup_next').hide()
+                $('#setup_content').hide()
+
+
+                $('#setup_title').html('Downloading Files...')
+                $('#setup_installing').show()
+
+
             } else alert(text)
         })
         .catch(error => console.log('error', error))
@@ -33,15 +41,24 @@ function createStandaloneInstance() {
 }
 
 
-socket.on('server_install_progress', function(data) {
-    if (data.time.includes('/')) data.time = '...Extracting Files'
-    $('#installSA_progress').attr('value', data.percent)
-    $('#installSA_progress_percent').html(`${data.percent}%`)
-    $('#installSA_progress_time').html(data.time)
+socket.on('server_install_download', function (data) {
+    if (!data.time.includes('/')) {
+        $('#setup_title').html(`Downloading Files... ${data.time}`)
+        $('#setup_download_files').find('p').html(`Downloading Files... (${data.percent}%)`)
+    } else {
+        $('#setup_title').html('Extracting Files...')
+        $('#setup_download_files').html(`<p>Files Downloaded! (100%)</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+    }
 })
 
-socket.on('server_install_complete', function(data) {
-    alert('Instance Successfully Installed | Code: ' + data.code)
-    $('[id^="createSA_"]').show()
-    $('[id^="installSA_"]').hide()
+socket.on('server_install_extract', () => {
+    $('#setup_extract_files').html(`<p>Files Extracted!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+})
+
+socket.on('server_install_world', () => {
+    $('#setup_import_world').html(`<p>World Imported!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+})
+
+socket.on('server_install_config', () => {
+    $('#setup_import_config').html(`<p>Config Imported!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })

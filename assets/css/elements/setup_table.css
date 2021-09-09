@@ -1,0 +1,19 @@
+.setup_table td {
+    padding: 1em 0;
+}
+
+.setup_table td * {
+    display: block;
+}
+
+.setup_table label {
+    margin-bottom: .5em;
+}
+
+.setup_table span {
+    display: inline;
+}
+
+.setup_table input, select {
+    width: 90%;
+}

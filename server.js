@@ -35,8 +35,6 @@ if (process.argv[2] === 'install') {
 
 //? Uninstall Service
 if (process.argv[2] === 'uninstall') {
-    fs.rmdirSync('./local', { recursive: true })
-
     exec('.\\util\\nssm.exe stop "Torch.js"', (err, stdout, stderr) => {
         if (err) return console.error(err)
     })
@@ -73,7 +71,8 @@ const port = SystemConfig.web.port
 app.set('view engine', 'ejs')
 app.use(upload.array())
 app.use(require('cookie-parser')())
-app.use(express.static('assets'))
+app.use('/assets', express.static('assets'))
+app.use('/presets', express.static('presets'))
 
 //? Socket.io
 const http = require('http')

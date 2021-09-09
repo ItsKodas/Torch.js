@@ -5,11 +5,13 @@
     <title>Servers | Torch.js</title>
 
     <%- include('partials/master.ejs') %>
+
+    <link rel="stylesheet" href="/assets/css/elements/setup_table.css" />
 </head>
 
 <body>
     <div style="padding: 0 1em">
-        <button onclick="$('#create_standalone_sector').is(':visible') ? $('#create_standalone_sector').fadeOut('fast') : $('#create_standalone_sector').fadeIn('fast'), prepareModal_Main('New Standalone Sector', 'Are you sure you want to create a new Standalone Sector?')">Create Standalone Instance</button>
+        <button data-open="modal_new_server">Create New Server</button>
     </div>
 
     <div style="display: flex">
@@ -33,11 +35,97 @@
     </div>
 </body>
 
+
+<div class="modal <% if (data.servers.length === 0) { %>is-visible<% } %>" id="modal_new_server">
+    <div class="modal-dialog" style="width: 80em; height: fit-content;">
+        <header class="modal-header">
+            <h1 id="setup_title" style="margin-bottom: -.5em;">New Server</h1>
+        </header>
+
+        <section id="setup_content" class="modal-content">
+            <h3>General Configurations</h3>
+            <table class="setup_table" style="border-color: white; width: 100%;">
+                <tr>
+                    <td>
+                        <label>Server Name</label>
+                        <input id="server_name" type="text" placeholder="E.g. Solar System">
+                    </td>
+                    <td>
+                        <label>Server Type <% if (!locals.nexus) { %><span id="nexus_warning" style="color: red; display: none;">- Nexus is Required for Sectoring!</span><% } %></label>
+                        <select id="server_type" onchange="updateServerType()">
+                            <option selected>Standalone</option>
+                            <option>Lobby</option>
+                            <option>Normal Sector</option>
+                            <option>General Sector</option>
+                        </select>
+
+                        <script style="display: none;">
+                            function updateServerType() {
+                                if ($('#server_type').find(":selected").text() !== "Standalone") $('[id^="nexus_"]').show()
+                                else $('[id^="nexus_"]').hide()
+                            }
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>World Preset</label>
+                        <select id="server_world_preset">
+                            <% for (world of data.presets.worlds) { %>
+                                <option><%= world %></option>
+                            <% } %>
+                        </select>
+                    </td>
+                    <td>
+                        <label>Config Preset | <span style="color: tomato; cursor: pointer; text-decoration: underline;" onclick="viewConfigPreset()">View Preset</span></label>
+                        <select id="server_config_preset">
+                            <% for (config of data.presets.configs) { config = config.replace('_', ' '), config = config.replace('.xml', '')%>
+                                <option><%= config %></option>
+                            <% } %>
+                        </select>
+
+                        <script style="display: none;">
+                            function viewConfigPreset() {
+                                var configFile = $('#server_config_preset').find(":selected").text()
+                                configFile = configFile.replace(' ', '_'), configFile += '.xml'
+                                window.open('/presets/instance/config/' + configFile, '_blank')
+                            }
+                        </script>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="setup_installing" class="modal-content" style="display: none; margin-top: 2em;">
+            <div style="display: flex;" id="setup_download_files">
+                <p>Download Files</p><div class="loader" style="margin: 2em 40em"></div>
+            </div>
+            
+            <div style="display: flex;" id="setup_extract_files">
+                <p>Extract Files</p><div class="loader" style="margin: 2em 40em"></div>
+            </div>
+
+            <div style="display: flex;" id="setup_import_world">
+                <p>Import World Preset</p><div class="loader" style="margin: 2em 40em"></div>
+            </div>
+            
+            <div style="display: flex;" id="setup_import_config">
+                <p>Import Config Preset</p><div class="loader" style="margin: 2em 40em"></div>
+            </div>
+        </section>
+
+        <footer class="modal-footer">
+            <button id="setup_cancel" style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
+            <button id="setup_next" style="position: flex; float: right; margin-top: -2em; background-color: #3b97e2" onclick="createNewServer()">Create</button>
+        </footer>
+    </div>
+</div>
+
 <%- include('partials/modals.ejs') %>
 
-<footer>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/servers.js"></script>
-</footer>
+    <footer>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="/assets/js/servers.js"></script>
+    </footer>
 
 </html>
