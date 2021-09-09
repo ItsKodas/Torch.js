@@ -54,3 +54,11 @@ socket.on('server_install_download', function (data) {
 socket.on('server_install_extract', () => {
     $('#setup_extract_files').html(`<p>Files Extracted!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })
+
+socket.on('server_install_world', () => {
+    $('#setup_import_world').html(`<p>World Imported!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+})
+
+socket.on('server_install_config', () => {
+    $('#setup_import_config').html(`<p>Config Imported!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+})
