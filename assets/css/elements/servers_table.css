@@ -1,0 +1,25 @@
+.servers_table td {
+    padding: 1em;
+}
+
+.servers_table, table, tr, td {
+    border-style: solid;
+    border-color: #5e6063;
+    border-collapse: collapse;
+}
+
+.servers_table td * {
+    display: inline-block;
+}
+
+.servers_table label {
+    margin-bottom: .5em;
+}
+
+.servers_table span {
+    display: inline;
+}
+
+.servers_table input, select {
+    width: 90%;
+}

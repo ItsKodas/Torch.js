@@ -18,7 +18,24 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         try {
-            data.servers = await fs.promises.readdir(SystemConfig.system.directory)
+            var servers = await fs.promises.readdir(SystemConfig.system.directory)
+            for (server of servers) {
+
+                if (!fs.existsSync(`${SystemConfig.system.directory}\\${server}\\Torch.js`)) {
+                    data.servers.push({ id: server, notImported: true })
+                    continue
+                }
+
+                var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${server}\\Torch.js\\config.json`).catch(() => { console.log(`${server} has no config.json`) })
+                if (!config) {
+                    data.servers.push({ id: server, error: true })
+                    continue
+                }
+
+                data.servers.push(JSON.parse(config))
+            }
+
+            console.log(data.servers)
 
             data.presets['worlds'] = await fs.promises.readdir('./presets/instance/world')
             data.presets['configs'] = await fs.promises.readdir('./presets/instance/config')
