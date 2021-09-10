@@ -30,6 +30,8 @@ module.exports = async function (app, SystemConfig, io) {
             res.render('servers', { data, nexus })
         } catch (e) { return console.log(e), res.send(e) }
 
+        console.log(busy)
+
     })
 
 
@@ -67,7 +69,7 @@ module.exports = async function (app, SystemConfig, io) {
 
             socket.emit('server_install_torch', { percent, time })
         })
-        sectorInstaller.on('close', () => { socket.emit('server_install_torch'); postInstallation() })
+        sectorInstaller.on('close', () => { socket.emit('server_install_extract_torch'); postInstallation() })
 
 
         function postInstallation() {
@@ -79,9 +81,31 @@ module.exports = async function (app, SystemConfig, io) {
                 await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => res.status(500).send(err))
                 socket.emit('server_install_config')
 
-                busy = false
+                downloadSpaceEngineers()
             })
         }
+
+        function downloadSpaceEngineers() {
+            console.log('test')
+
+            var seDownloader = spawn(`${SystemConfig.system.directory}\\${name}\\${name}.Server.exe`)
+            seDownloader.stdout.on('data', data => {
+                console.log(data.toString())
+                data = data.toString()
+                if (data.includes('SteamCMD downloaded successfully')) return socket.emit('server_install_steam_prep')
+                if (data.includes('Waiting for user info')) return socket.emit('server_install_steam_ready')
+                if (data.includes('Update state')) return socket.emit('server_install_steam_download', { percent: data.split('progress:')[1].split('(')[0].trim(), code: data.split('Update state (')[1].split(')')[0] })
+                if (data.includes("Success! App '298740' fully installed")) return socket.emit('server_install_steam_done')
+                if (data.includes('PatchManager: Patched')) return socket.emit('server_install_seds_patching', { stage: data.split('Patched ')[1].split('.')[0] })
+                if (data.includes("PatchManager: Patching done")) return socket.emit('server_install_seds_done')
+            })
+            sectorInstaller.on('close', () => postSEDS())
+        }
+
+        function postSEDS() {
+
+        }
+
 
 
         return res.status(200).send()
