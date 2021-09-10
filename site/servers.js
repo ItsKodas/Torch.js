@@ -74,13 +74,13 @@ module.exports = async function (app, SystemConfig, io) {
                 if (err) return console.log(err), res.status(500).send(err), deleteServer()
                 socket.emit('server_install_world')
 
-                var config_file = await fs.promises.readFile(`.\\presets\\instance\\config\\${req.body.server_config_preset}`).catch(err => res.status(500).send(err))
-                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => res.status(500).send(err))
+                var config_file = await fs.promises.readFile(`.\\presets\\instance\\config\\${req.body.server_config_preset}`).catch(err => console.log(err))
+                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => console.log(err))
 
-                var torch_cfg = await fs.promises.readFile(`.\\resources\\torch\\torch.cfg`).catch(err => res.status(500).send(err))
+                var torch_cfg = await fs.promises.readFile(`.\\resources\\torch\\torch.cfg`).catch(err => console.log(err))
                 torch_cfg = torch_cfg.toString().replace('%SERVER_NAME%', name)
                 torch_cfg = torch_cfg.toString().replace('%INSTANCE_PATH%', `${SystemConfig.system.directory}\\${name}\\Instance`)
-                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.cfg`, torch_cfg).catch(err => res.status(500).send(err))
+                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.cfg`, torch_cfg).catch(err => console.log(err))
 
                 socket.emit('server_install_config')
 
@@ -109,7 +109,7 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         async function postSEDS() {
-            console.log(`${name} Fully Setup!`)
+            console.log(`${name} Installation Complete!`)
 
             var config = {
                 id: name,
@@ -121,7 +121,7 @@ module.exports = async function (app, SystemConfig, io) {
                 restart: []
             }
 
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config, null, '\t')).catch(err => res.status(500).send(err))
+            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
 
             socket.emit('server_install_seds_done', { server: name })
 
@@ -129,7 +129,7 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         async function deleteServer() {
-            await fs.promises.rmdir(`${SystemConfig.system.directory}\\${name}`, { recursive: true }).catch(err => res.status(500).send(err))
+            await fs.promises.rmdir(`${SystemConfig.system.directory}\\${name}`, { recursive: true }).catch(err => console.log(err))
             await fs.promises.unlink('.\\BUSY').catch(() => { console.log('Server not Busy.') })
         }
 
