@@ -96,23 +96,43 @@
             </table>
         </section>
 
-        <section id="setup_installing" class="modal-content" style="display: none; margin-top: 2em;">
-            <div style="display: flex;" id="setup_download_files">
-                <p>Download Files</p><div class="loader" style="margin: 2em 40em"></div>
-            </div>
-            
-            <div style="display: flex;" id="setup_extract_files">
-                <p>Extract Files</p><div class="loader" style="margin: 2em 40em"></div>
+        <section id="setup_installing" class="modal-content" style="margin-top: 2em; display: flex;">
+            <div>
+                <div style="display: flex;" id="setup_download_torch">
+                    <p>Download Torch</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+                
+                <div style="display: flex;" id="setup_extract_torch">
+                    <p>Extract Torch</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+
+                <div style="display: flex;" id="setup_import_world">
+                    <p>Import World Preset</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+                
+                <div style="display: flex;" id="setup_import_config">
+                    <p>Import Config Preset</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
             </div>
 
-            <div style="display: flex;" id="setup_import_world">
-                <p>Import World Preset</p><div class="loader" style="margin: 2em 40em"></div>
+            <div style="margin-left: 30em;">
+                <div style="display: flex;" id="setup_prep_steam">
+                    <p>Prepare SteamCMD</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+                
+                <div style="display: flex;" id="setup_prep_download">
+                    <p>Prepare Download</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+
+                <div style="display: flex;" id="setup_download_se">
+                    <p>Download SEDS</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
+                
+                <div style="display: flex;" id="setup_patch_seds">
+                    <p>Patch SEDS</p><div class="loader" style="margin: 2em 40em"></div>
+                </div>
             </div>
-            
-            <div style="display: flex;" id="setup_import_config">
-                <p>Import Config Preset</p><div class="loader" style="margin: 2em 40em"></div>
-            </div>
-        </section>
+        </section> <script>$('#setup_installing').hide()</script>
 
         <footer class="modal-footer">
             <button id="setup_cancel" style="position: flex; float: left; margin-top: -2em; background-color: #E2563E" data-close>Cancel</button>
