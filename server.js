@@ -3,6 +3,7 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const { exec } = require('child_process')
 
+fs.unlinkSync('.\\BUSY')
 
 
 //!
