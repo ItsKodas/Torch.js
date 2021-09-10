@@ -80,6 +80,7 @@ socket.on('server_install_cmd_download', (data) => {
 
 socket.on('server_install_steam_ready', () => {
     $('#setup_title').html('Download Will Start Shortly...')
+    $('#setup_prep_steam').html(`<p>SteamCMD Downloaded!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
     $('#setup_prep_download').html(`<p>SteamCMD Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
     $('#setup_download_se').find('p').html(`Download SEDS (stby 3m~)`)
 })
