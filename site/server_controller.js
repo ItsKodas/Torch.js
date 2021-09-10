@@ -8,7 +8,7 @@ const fs = require('fs')
 module.exports = async function (app, SystemConfig, io) {
 
     app.get('/server', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'server_view')) return res.status(403).send()
+        if (!Permissions.Check(req.account.discord, 'server.view')) return res.status(403).send()
 
         const server = req.query.id
 
@@ -22,7 +22,7 @@ module.exports = async function (app, SystemConfig, io) {
     })
 
     app.post('/server', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'server_manage')) return res.status(403).send()
+        if (!Permissions.Check(req.account.discord, 'server.manage')) return res.status(403).send()
         if (!fs.existsSync(`${SystemConfig.system.directory}\\${req.body.id}`)) return
 
         var config = {

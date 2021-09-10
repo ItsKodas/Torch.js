@@ -10,7 +10,7 @@ module.exports = async function (app, SystemConfig, io) {
     var socket = await io.on('connection', async (socket) => socket)
 
     app.get('/servers', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'servers')) return res.status(403).send()
+        if (!Permissions.Check(req.account.discord, 'server.list')) return res.status(403).send()
 
         var data = {
             servers: [],
@@ -48,7 +48,7 @@ module.exports = async function (app, SystemConfig, io) {
 
 
     app.post('/servers/create', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'create_server')) return res.status(403).send("You do not have permission to do this.")
+        if (!Permissions.Check(req.account.discord, 'server.create')) return res.status(403).send("You do not have permission to do this.")
         if (await fs.existsSync('.\\BUSY')) return res.status(400).send("Server is busy.")
 
         var name = req.body.server_name.trim()
