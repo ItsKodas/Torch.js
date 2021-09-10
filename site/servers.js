@@ -65,9 +65,9 @@ module.exports = async function (app, SystemConfig, io) {
             percent = percent.replace('%', '')
             time = time.replace('\r\n', '')
 
-            socket.emit('server_install_download', { percent, time })
+            socket.emit('server_install_torch', { percent, time })
         })
-        sectorInstaller.on('close', () => { socket.emit('server_install_extract'); postInstallation() })
+        sectorInstaller.on('close', () => { socket.emit('server_install_torch'); postInstallation() })
 
 
         function postInstallation() {
