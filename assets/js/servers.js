@@ -65,7 +65,7 @@ socket.on('server_install_config', () => {
 })
 
 socket.on('server_install_steam_prep', () => {
-    $('#setup_prep_steam').html(`<p>SteamCMD Prepared!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+    $('#setup_prep_steam').find('p').html(`Preparing SteamCMD...`)
 })
 
 socket.on('server_install_cmd_download', (data) => {
@@ -74,7 +74,7 @@ socket.on('server_install_cmd_download', (data) => {
         $('#setup_prep_steam').find('p').html(`Downloading SteamCMD... (${data.percent}%)`)
     } else {
         $('#setup_title').html('Finalizing SteamCMD...')
-        $('#setup_prep_steam').html(`<p>SteamCMD Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+        $('#setup_prep_steam').html(`<p>SteamCMD Downloaded!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
     }
 })
 
@@ -106,7 +106,16 @@ socket.on('server_install_seds_patching', (data) => {
     $('#setup_patch_seds').find('p').html(`Patching SEDS... (${data.stage})`)
 })
 
-socket.on('server_install_seds_done', () => {
-    $('#setup_title').html(`${$('#server_name').value} Setup Complete!`)
+socket.on('server_install_seds_done', (data) => {
+    $('#setup_title').html(`${data.server} Setup Complete!`)
     $('#setup_patch_seds').html(`<p>SEDS Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
+
+    setTimeout(() => { window.open(`/server?id=${data.server}`) }, 3000)
+})
+
+
+
+socket.on('server_failure', (data) => {
+    alert(data.error)
+    window.location.reload()
 })
