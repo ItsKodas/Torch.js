@@ -79,6 +79,12 @@ module.exports = async function (app, SystemConfig, io) {
 
                 var config_file = await fs.promises.readFile(`.\\presets\\instance\\config\\${req.body.server_config_preset}`).catch(err => res.status(500).send(err))
                 await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => res.status(500).send(err))
+
+                var torch_cfg = await fs.promises.readFile(`.\\resources\\torch\\torch.cfg`).catch(err => res.status(500).send(err))
+                torch_cfg = torch_cfg.toString().replace('%SERVER_NAME%', name)
+                torch_cfg = torch_cfg.toString().replace('%INSTANCE_PATH%', `${SystemConfig.system.directory}\\${name}\\Instance`)
+                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.cfg`, torch_cfg).catch(err => res.status(500).send(err))
+
                 socket.emit('server_install_config')
 
                 downloadSpaceEngineers()
@@ -93,6 +99,7 @@ module.exports = async function (app, SystemConfig, io) {
                 console.log(data.toString())
                 data = data.toString()
                 if (data.includes('SteamCMD downloaded successfully')) return socket.emit('server_install_steam_prep')
+                if (data.includes('SteamCMD: [ ')) return socket.emit('server_install_cmd_download', { percent: data.split(': [ ')[1].split('%')[0] })
                 if (data.includes('Waiting for user info')) return socket.emit('server_install_steam_ready')
                 if (data.includes('Update state')) return socket.emit('server_install_steam_download', { percent: data.split('progress:')[1].split('(')[0].trim(), code: data.split('Update state (')[1].split(')')[0] })
                 if (data.includes("Success! App '298740' fully installed")) return socket.emit('server_install_steam_done')
