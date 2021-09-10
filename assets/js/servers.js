@@ -40,6 +40,20 @@ function createNewServer() {
     return false
 }
 
+function importServer(id) {
+    $.ajax({
+        url: `/server/${id}?action=import`,
+        type: 'GET',
+        success: () => {
+            window.location.reload()
+        }
+    })
+}
+
+function resetServer(id) {
+    fetch(`/server/${id}?action=reset`)
+}
+
 
 socket.on('server_install_torch', function (data) {
     if (!data.time.includes('/')) {

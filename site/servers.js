@@ -35,8 +35,6 @@ module.exports = async function (app, SystemConfig, io) {
                 data.servers.push(JSON.parse(config))
             }
 
-            console.log(data.servers)
-
             data.presets['worlds'] = await fs.promises.readdir('./presets/instance/world')
             data.presets['configs'] = await fs.promises.readdir('./presets/instance/config')
 

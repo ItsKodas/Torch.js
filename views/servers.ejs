@@ -25,10 +25,10 @@
         <% for (server of data.servers) { %>
         <tr>
             <td>
-                <a href="/server/<%= server.id %>" style="color: tomato;"><%= server.id %> <i class="fas fa-external-link-alt" style="margin-left: .3em; color: tomato;"></i></a>
+                <a href="/server?id=<%= server.id %>" style="color: tomato;"><%= server.id %> <i class="fas fa-external-link-alt" style="margin-left: .3em; color: tomato;"></i></a>
             </td>
             <td><%= server.type || 'N/A' %></td>
-            <% if (server.error) { %><td>Failed to Import! | <span onclick="resetServer('<%= server.id %>')" style="color: red; text-decoration: underline; cursor: pointer;">Reset Torch.js</span></td><% } %>
+            <% if (server.error) { %><td>Failed to Import! | <span onclick="resetServer('<%= server.id %>')" style="color: red; text-decoration: underline; cursor: pointer;">Reset Config</span></td><% } %>
             <% if (server.notImported) { %><td>Server has not been Imported | <span onclick="importServer('<%= server.id %>')" style="color: rgb(50, 206, 50); text-decoration: underline; cursor: pointer;">Import</span></td><% } %>
         </tr>
         <% } %>
