@@ -97,13 +97,13 @@ module.exports = async function (app, SystemConfig, io) {
                 if (data.includes('Update state')) return socket.emit('server_install_steam_download', { percent: data.split('progress:')[1].split('(')[0].trim(), code: data.split('Update state (')[1].split(')')[0] })
                 if (data.includes("Success! App '298740' fully installed")) return socket.emit('server_install_steam_done')
                 if (data.includes('PatchManager: Patched')) return socket.emit('server_install_seds_patching', { stage: data.split('Patched ')[1].split('.')[0] })
-                if (data.includes("PatchManager: Patching done")) return socket.emit('server_install_seds_done')
+                if (data.includes("PatchManager: Patching done")) return socket.emit('server_install_seds_done')//, seDownloader.kill()
             })
             sectorInstaller.on('close', () => postSEDS())
         }
 
         function postSEDS() {
-
+            console.log('Server Fully Setup!')
         }
 
 

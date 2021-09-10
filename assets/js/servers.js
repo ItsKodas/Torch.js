@@ -60,14 +60,17 @@ socket.on('server_install_world', () => {
 })
 
 socket.on('server_install_config', () => {
+    $('#setup_title').html('Preparing SteamCMD...')
     $('#setup_import_config').html(`<p>Config Imported!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })
 
 socket.on('server_install_steam_prep', () => {
+    $('#setup_title').html('Preparing Download...')
     $('#setup_prep_steam').html(`<p>SteamCMD Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })
 
 socket.on('server_install_steam_ready', () => {
+    $('#setup_title').html('Download Will Start Shortly...')
     $('#setup_prep_download').html(`<p>Download Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
     $('#setup_download_se').find('p').html(`Download SEDS (stby 3m~)`)
 })
@@ -77,19 +80,24 @@ socket.on('server_install_steam_download', (data) => {
     if (data.code === '0x3') state = 'Reconfiguring'
     if (data.code === '0x11') state = 'Preallocating'
     if (data.code === '0x61') state = 'Downloading'
+    if (data.code === '0x81') state = 'Verifying'
     if (data.code === '0x101') state = 'Extracting'
 
+    $('#setup_title').html(`${state} SEDS...`)
     $('#setup_download_se').find('p').html(`${state} SEDS... (${data.percent}%)`)
 })
 
 socket.on('server_install_steam_done', () => {
+    $('#setup_title').html('Preparing to Patch...')
     $('#setup_download_se').html(`<p>SEDS Installed!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })
 
 socket.on('server_install_seds_patching', (data) => {
+    $('#setup_title').html('Patching SEDS...')
     $('#setup_patch_seds').find('p').html(`Patching SEDS... (${data.stage})`)
 })
 
 socket.on('server_install_seds_done', () => {
+    $('#setup_title').html(`${$('#server_name').value} Setup Complete!`)
     $('#setup_patch_seds').html(`<p>SEDS Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 })
