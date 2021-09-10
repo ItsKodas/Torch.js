@@ -121,16 +121,16 @@ module.exports = async function (app, SystemConfig, io) {
                 restart: []
             }
 
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config)).catch(err => res.status(500).send(err))
+            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config, null, '\t')).catch(err => res.status(500).send(err))
 
-            socket.emit('server_install_seds_done', { server: name})
+            socket.emit('server_install_seds_done', { server: name })
 
-            await fs.promises.unlink('.\\BUSY').catch(err => res.status(500).send(err))
+            await fs.promises.unlink('.\\BUSY').catch(() => console.log('Server not Busy.'))
         }
 
         async function deleteServer() {
             await fs.promises.rmdir(`${SystemConfig.system.directory}\\${name}`, { recursive: true }).catch(err => res.status(500).send(err))
-            await fs.promises.unlink('.\\BUSY').catch(err => res.status(500).send(err))
+            await fs.promises.unlink('.\\BUSY').catch(() => { console.log('Server not Busy.') })
         }
 
 

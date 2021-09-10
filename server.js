@@ -3,7 +3,7 @@ const fs = require('fs')
 const fetch = require('node-fetch')
 const { exec } = require('child_process')
 
-fs.unlinkSync('.\\BUSY')
+try { fs.unlinkSync('.\\BUSY') } catch { console.log('Server is not Busy.') }
 
 
 //!
@@ -88,7 +88,7 @@ server.listen(SystemConfig.web.port, () => {
 //? Setup Pages
 if (!SystemConfig.web.setup_complete) return require('./site/special/setup.js')(app, __dirname), console.log('Booting in Setup Mode.')
 
-app.use(async function(req, res, next) {
+app.use(async function (req, res, next) {
     if (req.originalUrl === '/login' || req.originalUrl.includes('/callback')) return next()
 
     var user = JSON.parse(await new Promise((resolve, reject) => {
@@ -115,7 +115,7 @@ app.use(async function(req, res, next) {
     if (!user) return res.redirect('/login')
 
     req.account = await new Promise((resolve, reject) => {
-        fs.readFile(`./local/users/${user.id}.json`, function(err, data) {
+        fs.readFile(`./local/users/${user.id}.json`, function (err, data) {
             var account
 
             if (err) {

@@ -110,7 +110,7 @@ socket.on('server_install_seds_done', (data) => {
     $('#setup_title').html(`${data.server} Setup Complete!`)
     $('#setup_patch_seds').html(`<p>SEDS Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 
-    setTimeout(() => { window.location.href(`/server?id=${data.server}`) }, 3000)
+    setTimeout(() => { window.location.href =`/server?id=${data.server}` }, 3000)
 })
 
 
