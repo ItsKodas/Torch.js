@@ -58,9 +58,9 @@
                         <label>Server Type <% if (!locals.nexus) { %><span id="nexus_warning" style="color: red; display: none;">- Nexus is Required for Sectoring!</span><% } %></label>
                         <select id="server_type" onchange="updateServerType()">
                             <option selected>Standalone</option>
-                            <option>Lobby</option>
-                            <option>Normal Sector</option>
-                            <option>General Sector</option>
+                            <option disabled>Lobby</option>
+                            <option disabled>Normal Sector</option>
+                            <option disabled>General Sector</option>
                         </select>
 
                         <script style="display: none;">
