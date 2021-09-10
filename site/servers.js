@@ -115,13 +115,19 @@ module.exports = async function (app, SystemConfig, io) {
                 id: name,
                 type: req.body.server_type,
                 online: false,
+                active: {
+                    server_config: `Default.cfg`,
+                    world_config: `Default.sbc`
+                },
                 permissions: {
                     full: ['administrators']
                 },
                 restart: []
             }
 
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
+            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
+            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
 
             socket.emit('server_install_seds_done', { server: name })
 
