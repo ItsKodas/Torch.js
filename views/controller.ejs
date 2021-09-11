@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title><%= config.id %> | <%= SystemConfig.web.community%></title>
+
+    <%- include('partials/master.ejs') %>
+</head>
+
+<body>
+    <div style="margin: 0 2em;">
+
+        <div class="row" style="margin: 1em 0;">
+            <p style="font-size: 30pt;"><%= config.id %></p>
+            <p onclick="startServer('<%= config.id %>')" style="margin: 0 2em; color: #55eb48; cursor: pointer;">Start</p>
+            <p onclick="stopServer('<%= config.id %>')" style="color: red; cursor: pointer;">Stop</p>
+        </div>
+
+        <div class="card" style="margin: 0;">
+            Coming Soon
+        </div>
+
+    </div>
+</body>
+
+
+
+<footer>
+
+</footer>
+
+
+</html>
