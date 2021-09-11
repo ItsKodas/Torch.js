@@ -23,6 +23,7 @@ module.exports = async function (app, SystemConfig, io) {
     })
 
     app.post('/server', async function (req, res) {
+        console.log(req.body)
         if (!fs.existsSync(`${SystemConfig.system.directory}\\${req.body.id}`)) return res.status(404).send()
 
         var new_config = {
@@ -39,15 +40,12 @@ module.exports = async function (app, SystemConfig, io) {
 
         if (req.body.action === 'start') {
             if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
-            var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
-            if (!config) return res.status(500).send('Could not find a Torch.js config file for this server.')
-            config = JSON.parse(config.toString())
-            config.online = true
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { res.status(500).send('Could not write a Torch.js config file for this server.') })
+            Controls.Start(req.body.id, req.account.discord)
         }
 
         if (req.body.action === 'stop') {
             if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
+            Controls.Stop(req.body.id, req.account.discord)
 
         }
 
