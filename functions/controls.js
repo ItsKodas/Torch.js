@@ -1,6 +1,7 @@
 const SystemConfig = require('../local/system.json')
 const Permissions = require('./permissions')
 const Discord = require('./discord')
+const Essentials = require('./essentials')
 
 const { spawn } = require('child_process')
 
@@ -15,6 +16,7 @@ module.exports = {
 
     Start: async function (id, user) {
         if (!Permissions.Check(user, 'server.control')) return false
+        await Essentials.UpdateFiles(id)
         var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
         if (!config) return false
         config = JSON.parse(config.toString())
@@ -30,7 +32,7 @@ module.exports = {
         Command.on('close', () => {
             if (Tasklist.includes(`${id}.Server.exe`)) return
 
-            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true }), Discord.Notification(`⏳ ${id} Starting...`, '#4273fc')
+            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true }), Discord.Notification(`⏳ ${id} is Starting...`, '#4273fc')
             Attached[id].stdout.on('data', async (data) => {
                 data = data.toString()
                 console.log(data)
@@ -61,6 +63,13 @@ module.exports = {
                     delete Attached[id]
                     Discord.Notification(`❌ ${id} has Crashed!`, '#d43333')
                 }
+
+                if (data.includes('MultiplayerManagerBase: Player') && data.includes('joined')) {
+                    Discord.Notification(`🤝 ${data.split('Player ')[1].split(' joined')[0]} has Joined ${id}`, '#b8ffa8')
+                }
+                if (data.includes('Keen: User left')) {
+                    Discord.Notification(`👋 ${data.split('User left ')[1].split('\n')[0].slice(0, -1)} has left ${id}`, '#ff887d')
+                }
             })
         })
     },
@@ -73,12 +82,12 @@ module.exports = {
         if (user !== 'system') config.online = false
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#d43333')
+        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#212121')
         Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port })
             .then(async (data) => {
                 this.Rcon(id, user, ['!stop true 0']), console.log(`Stop Command issued to ${id}`), Discord.Notification(`⏳ Stop Request Issued to ${id}`, '#e06f28')
             }).catch(() => {
-                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#d43333')
+                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#212121')
             });
     },
 

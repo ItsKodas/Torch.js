@@ -106,7 +106,6 @@ module.exports = async function (app, client, SystemConfig, io) {
 
             await fs.promises.writeFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`, JSON.stringify(new_config, null, '\t')).catch((err) => { console.log(err), res.status(500).send(err) })
             
-            Essentials.UpdateFiles(req.body.id)
             return res.status(200).send()
         }
 

@@ -50,6 +50,12 @@ module.exports = {
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Instance\\Rcon.cfg`, rcon_cfg).catch((err) => console.log(err))
 
 
+        //? Update Server Config
+        var server_cfg = (await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Instance\\SpaceEngineers-Dedicated.cfg`).catch((err) => console.log(err))).toString()
+        server_cfg = this.ReplaceXml(server_cfg, 'ServerPort', config.port)
+        await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Instance\\SpaceEngineers-Dedicated.cfg`, server_cfg).catch((err) => console.log(err))
+
+
         return true
     }
 
