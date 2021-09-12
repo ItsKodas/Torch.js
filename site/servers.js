@@ -132,7 +132,7 @@ module.exports = async function (app, client, SystemConfig, io) {
                 id: name,
                 port: req.body.server_game_port,
                 rcon: req.body.server_rcon_port,
-                rcon_password: 'password',
+                rcon_password: 'sIHb6F4ew//D1OfQInQAzQ==',
                 type: req.body.server_type,
                 online: false,
                 active: {

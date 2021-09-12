@@ -1,11 +1,14 @@
 const SystemConfig = require('../local/system.json')
 const Permissions = require('./permissions')
 const Discord = require('./discord')
+const Essentials = require('./essentials')
 
 const { spawn } = require('child_process')
 
 const fs = require('fs')
-const Gamedig = require('gamedig');
+const Password = require('generate-password')
+const Gamedig = require('gamedig')
+const { isAnyArrayBuffer } = require('util/types')
 
 var Attached = {}
 
@@ -13,6 +16,7 @@ module.exports = {
 
     Start: async function (id, user) {
         if (!Permissions.Check(user, 'server.control')) return false
+        await Essentials.UpdateFiles(id)
         var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
         if (!config) return false
         config = JSON.parse(config.toString())
@@ -28,13 +32,20 @@ module.exports = {
         Command.on('close', () => {
             if (Tasklist.includes(`${id}.Server.exe`)) return
 
-            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true }), Discord.Notification(`⏳ ${id} Starting...`, '#4273fc')
-            Attached[id].stdout.on('data', (data) => {
+            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true }), Discord.Notification(`⏳ ${id} is Starting...`, '#4273fc')
+            Attached[id].stdout.on('data', async (data) => {
                 data = data.toString()
                 console.log(data)
 
                 if (data.includes('Game ready')) {
                     Discord.Notification(`✅ ${id} is Ready to Join!`, '#33d438')
+                    if (config.rcon_password === 'sIHb6F4ew//D1OfQInQAzQ==') {
+                        var newPassword = Password.generate({ length: 24, numbers: true })
+                        await this.Rcon(id, 'system', [`!rcon setpassword ${newPassword}`, `!stop true 0`])
+                        config.rcon_password = newPassword
+                        await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Failed to update Password!'), this.Rcon(id, 'system', `!rcon setpassword password`) })
+                        Discord.Notification(`⚙️ RCON Password has been Generated for ${id}`, '#e06f28')
+                    }
                 }
 
                 if (data.includes('Server stopped.')) {
@@ -52,6 +63,13 @@ module.exports = {
                     delete Attached[id]
                     Discord.Notification(`❌ ${id} has Crashed!`, '#d43333')
                 }
+
+                if (data.includes('MultiplayerManagerBase: Player') && data.includes('joined')) {
+                    Discord.Notification(`🤝 ${data.split('Player ')[1].split(' joined')[0]} has Joined ${id}`, '#b8ffa8')
+                }
+                if (data.includes('Keen: User left')) {
+                    Discord.Notification(`👋 ${data.split('User left ')[1].split('\n')[0].slice(0, -1)} has left ${id}`, '#ff887d')
+                }
             })
         })
     },
@@ -64,12 +82,12 @@ module.exports = {
         if (user !== 'system') config.online = false
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
+        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#212121')
         Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port })
             .then(async (data) => {
-                this.Rcon('Sol', user, '!stop true 0'), console.log(`Stop Command issued to ${id}`), Discord.Notification(`⏳ Stop Request Issued to ${id}`, '#e06f28')
+                this.Rcon(id, user, ['!stop true 0']), console.log(`Stop Command issued to ${id}`), Discord.Notification(`⏳ Stop Request Issued to ${id}`, '#e06f28')
             }).catch(() => {
-                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
+                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process has been Forcefully Killed`, '#212121')
             });
     },
 
@@ -100,16 +118,28 @@ module.exports = {
         })
     },
 
-    Rcon: async function (id, user, command) {
+    Rcon: async function (id, user, commands) {
         if (!Permissions.Check(user, 'server.rcon')) return false
+        var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
+        if (!config) return false
+        config = JSON.parse(config.toString())
+
+        if (config.rcon_password === 'sIHb6F4ew//D1OfQInQAzQ==') config.rcon_password = 'password'
 
         try {
             var { Rcon } = require("rcon-client")
             const rcon = await Rcon.connect({
-                host: "127.0.0.1", port: 27018, password: 'torchJSisCool'
+                host: "127.0.0.1", port: config.rcon, password: config.rcon_password
             })
-            var response = await rcon.send(command)
+
+            var response = []
+            for (command of commands) {
+                response.push(await rcon.send(command))
+            }
+
             rcon.on('error', (err) => console.log(err))
+
+            console.log(response)
 
             return response, rcon.end()
         } catch (e) {

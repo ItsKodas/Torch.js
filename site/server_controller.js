@@ -32,7 +32,7 @@ module.exports = async function (app, client, SystemConfig, io) {
             id: req.body.id,
             port: 27016,
             rcon: 37016,
-            rcon_password: 'password',
+            rcon_password: 'sIHb6F4ew//D1OfQInQAzQ==',
             type: 'Standalone',
             online: false,
             active: {
@@ -105,6 +105,7 @@ module.exports = async function (app, client, SystemConfig, io) {
             }
 
             await fs.promises.writeFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`, JSON.stringify(new_config, null, '\t')).catch((err) => { console.log(err), res.status(500).send(err) })
+            
             return res.status(200).send()
         }
 
