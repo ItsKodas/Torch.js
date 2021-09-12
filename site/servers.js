@@ -52,7 +52,7 @@ module.exports = async function (app, client, SystemConfig, io) {
         if (!Permissions.Check(req.account.discord, 'server.create')) return res.status(403).send("You do not have permission to do this.")
         if (await fs.existsSync('.\\BUSY')) return res.status(400).send("Server is busy.")
 
-        var name = req.body.server_name.trim()
+        var name = req.body.server_id.trim()
         req.body.server_config_preset = req.body.server_config_preset.replace(' ', '_'), req.body.server_config_preset += '.xml'
 
         if (!name.match(/^[a-zA-Z0-9-_]+$/)) return res.status(400).send("Instance name contains invalid characters.")
@@ -63,8 +63,6 @@ module.exports = async function (app, client, SystemConfig, io) {
         await fs.promises.writeFile('.\\BUSY', '').catch(e => console.log(e))
 
         await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World`, { recursive: true }).catch(err => res.status(500).send(err), busy = false)
-
-        return postSEDS()
 
         var sectorInstaller = spawn(".\\resources\\update_torch.bat", [name, SystemConfig.system.directory.split(':')[0], `${SystemConfig.system.directory}\\${name}`])
         sectorInstaller.stderr.on('data', data => {
@@ -131,12 +129,14 @@ module.exports = async function (app, client, SystemConfig, io) {
 
             var config = {
                 id: name,
-                port: req.body.server_port,
+                port: req.body.server_game_port,
+                rcon: req.body.server_rcon_port,
                 type: req.body.server_type,
                 online: false,
                 active: {
                     server_config: `Default.cfg`,
-                    world_config: `Default.sbc`
+                    world_config: `Default.sbc`,
+                    mod_list: ``
                 },
                 permissions: {
                     full: ['administrators']
@@ -144,8 +144,8 @@ module.exports = async function (app, client, SystemConfig, io) {
                 restart: []
             }
 
-            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
-            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
             await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
 
             socket.emit('server_install_seds_done', { server: name })

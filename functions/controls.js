@@ -54,12 +54,12 @@ module.exports = {
         if (user !== 'system') config.online = false
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id} was forcefully killed`, '#400505')
+        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
         Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port })
             .then(async (data) => {
                 this.Rcon('Sol', user, '!stop true 0'), console.log(`Stop Command issued to ${id}`), Discord.Notification(`⏳ Stop Request Issued to ${id}`, '#e06f28')
             }).catch(() => {
-                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id} was forcefully killed`, '#400505')
+                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
             });
     },
 

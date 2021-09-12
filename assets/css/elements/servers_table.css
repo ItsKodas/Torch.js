@@ -2,7 +2,7 @@
     padding: 1em;
 }
 
-.servers_table, table, tr, td {
+.servers_table, .servers_table tr, .servers_table td {
     border-style: solid;
     border-color: #5e6063;
     border-collapse: collapse;
@@ -20,6 +20,6 @@
     display: inline;
 }
 
-.servers_table input, select {
+.servers_table input, .servers_table select {
     width: 90%;
 }

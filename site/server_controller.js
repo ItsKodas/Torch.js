@@ -3,6 +3,7 @@ const { spawn } = require('child_process')
 
 const Permissions = require('../functions/permissions')
 const Controls = require('../functions/controls')
+const Essentials = require('../functions/essentials')
 
 const fs = require('fs')
 
@@ -61,7 +62,7 @@ module.exports = async function (app, client, SystemConfig, io) {
             if (!Permissions.Check(req.account.discord, 'server.manage')) return res.status(403).send()
             await fs.promises.mkdir(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\Presets\\Server`, { recursive: true }).catch((err) => { console.log(err), res.status(500).send(err) })
             await fs.promises.mkdir(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\Presets\\World`, { recursive: true }).catch((err) => { console.log(err), res.status(500).send(err) })
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`, JSON.stringify(new_config, null, '\t'))
+            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${req.body.id}\\Torch.js\\config.json`, JSON.stringify(new_config, null, '\t')).catch((err) => { console.log(err), res.status(500).send(err) })
             return res.status(200).send()
         }
 
