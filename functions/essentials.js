@@ -12,6 +12,14 @@ module.exports = {
         var value = file.split(`<${field}${extra}>`)[1].split(`</${field}>`)[0]
         if (!replace) return value
         return file.replace(`<${field}${extra}>${value}</${field}>`, `<${field}${extra}>${replace}</${field}>`)
+    },
+
+    UpdateFiles: async function (id) {
+        var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
+        if (!config) return false
+        config = JSON.parse(config)
+
+
     }
 
 }

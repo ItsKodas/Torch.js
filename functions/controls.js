@@ -40,7 +40,17 @@ module.exports = {
                 if (data.includes('Server stopped.')) {
                     Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`])
                     delete Attached[id]
-                    Discord.Notification(`⛔ ${id} Stopped`, '#d43333')
+                    Discord.Notification(`⛔ ${id} has Stopped`, '#d43333')
+                }
+
+                if (data.includes('[FATAL]')) {
+                    Discord.Notification(`⚠️ ${id} has had a Fatal Error!\n\n>>> ${data}`, '#d43333')
+                }
+
+                if (data.includes('Generating minidump at')) {
+                    Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`])
+                    delete Attached[id]
+                    Discord.Notification(`❌ ${id} has Crashed!`, '#d43333')
                 }
             })
         })

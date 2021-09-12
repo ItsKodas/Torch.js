@@ -4,6 +4,7 @@ const Permissions = require('../functions/permissions')
 const Discord = require('../functions/discord')
 
 const fs = require('fs')
+const Password = require('generate-password')
 const ncp = require('ncp').ncp
 
 module.exports = async function (app, client, SystemConfig, io) {
@@ -131,17 +132,19 @@ module.exports = async function (app, client, SystemConfig, io) {
                 id: name,
                 port: req.body.server_game_port,
                 rcon: req.body.server_rcon_port,
+                rcon_password: 'password',
                 type: req.body.server_type,
                 online: false,
                 active: {
+                    world: `World`,
                     server_config: `Default.cfg`,
                     world_config: `Default.sbc`,
-                    mod_list: ``
+                    mod_list: null
                 },
                 permissions: {
                     full: ['administrators']
                 },
-                restart: []
+                restart_times: []
             }
 
             await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))

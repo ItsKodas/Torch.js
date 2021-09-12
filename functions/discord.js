@@ -25,7 +25,7 @@ module.exports = {
         }
         var guild = await client.guilds.fetch('847246917654151168')
         var channel = await guild.channels.fetch('847246918953730049')
-        channel.send({ embeds: [embed] })
+        channel.send({ embeds: [embed] }).then(msg => setTimeout(() => msg.delete(), 120 * 1000))
     }
 
 }

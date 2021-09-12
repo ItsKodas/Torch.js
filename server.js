@@ -186,4 +186,4 @@ async function eventLoop() {
         Controls.Check(instance)
     }
 }
-setInterval(eventLoop, 5000)
+setInterval(eventLoop, 20 * 1000), eventLoop()
