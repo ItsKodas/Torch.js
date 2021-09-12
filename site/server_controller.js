@@ -45,8 +45,7 @@ module.exports = async function (app, SystemConfig, io) {
 
         if (req.body.action === 'stop') {
             if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
-            Controls.Stop(req.body.id, req.account.discord)
-
+            Controls.Check(req.body.id, req.account.discord)
         }
 
         if (req.body.action === 'import') {
