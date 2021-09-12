@@ -1,11 +1,12 @@
 const { spawn } = require('child_process')
 
 const Permissions = require('../functions/permissions')
+const Discord = require('../functions/discord')
 
 const fs = require('fs')
 const ncp = require('ncp').ncp
 
-module.exports = async function (app, SystemConfig, io) {
+module.exports = async function (app, client, SystemConfig, io) {
 
     var socket = await io.on('connection', async (socket) => socket)
 
@@ -62,6 +63,8 @@ module.exports = async function (app, SystemConfig, io) {
         await fs.promises.writeFile('.\\BUSY', '').catch(e => console.log(e))
 
         await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World`, { recursive: true }).catch(err => res.status(500).send(err), busy = false)
+
+        return postSEDS()
 
         var sectorInstaller = spawn(".\\resources\\update_torch.bat", [name, SystemConfig.system.directory.split(':')[0], `${SystemConfig.system.directory}\\${name}`])
         sectorInstaller.stderr.on('data', data => {
@@ -147,7 +150,7 @@ module.exports = async function (app, SystemConfig, io) {
 
             socket.emit('server_install_seds_done', { server: name })
 
-            await fs.promises.unlink('.\\BUSY').catch(() => console.log('Server not Busy.'))
+            await fs.promises.unlink('.\\BUSY').catch(() => console.log('Server not Busy.')), Discord.Notification(`⭐ New Instance Created (${name})`, '#9f39ed')
         }
 
         async function deleteServer() {

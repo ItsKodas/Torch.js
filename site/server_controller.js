@@ -6,7 +6,7 @@ const Controls = require('../functions/controls')
 
 const fs = require('fs')
 
-module.exports = async function (app, SystemConfig, io) {
+module.exports = async function (app, client, SystemConfig, io) {
 
     app.get('/server', async function (req, res) {
         if (!Permissions.Check(req.account.discord, 'server.view')) return res.status(403).send()
