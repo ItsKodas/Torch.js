@@ -28,6 +28,7 @@ module.exports = async function (app, SystemConfig, io) {
 
         var new_config = {
             id: req.body.id,
+            port: 27016,
             type: "Standalone",
             online: false,
             permissions: {
@@ -41,11 +42,19 @@ module.exports = async function (app, SystemConfig, io) {
         if (req.body.action === 'start') {
             if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
             Controls.Start(req.body.id, req.account.discord)
+            return res.status(200).send()
         }
 
         if (req.body.action === 'stop') {
             if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
-            Controls.Check(req.body.id, req.account.discord)
+            Controls.Stop(req.body.id, req.account.discord)
+            return res.status(200).send()
+        }
+
+        if (req.body.action === 'check') {
+            if (!Permissions.Check(req.account.discord, 'server.control')) return res.status(403).send()
+            Controls.Check(req.body.id)
+            return res.status(200).send()
         }
 
         if (req.body.action === 'import') {

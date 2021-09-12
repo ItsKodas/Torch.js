@@ -15,51 +15,68 @@ module.exports = {
         var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
         if (!config) return false
         config = JSON.parse(config.toString())
-        config.online = true
+        if (user !== 'system') config.online = true
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-        Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true })
-        Attached[id].stdout.on('data', (data) => {
-            data = data.toString()
-            console.log(data)
-            if (data.includes('Server stopped.')) Attached[id].kill() || spawn(`Taskkill /IM ${id}.Server.exe /F`, [])
+        var Command = spawn(`tasklist`)
+        var Tasklist = ''
+        Command.stdout.on('data', (data) => {
+            Tasklist += data.toString()
+        })
+
+        Command.on('close', () => {
+            if (Tasklist.includes(`${id}.Server.exe`)) return
+            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true })
+            Attached[id].stdout.on('data', (data) => {
+                data = data.toString()
+                console.log(data)
+                if (data.includes('Server stopped.')) Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), delete Attached[id]
+            })
         })
     },
 
-    Stop: async function (id, user) {
+    Stop: async function (id, user, force) {
         if (!Permissions.Check(user, 'server.control')) return false
         var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
         if (!config) return false
         config = JSON.parse(config.toString())
-        config.online = true
+        if (user !== 'system') config.online = false
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-
-
+        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`)
         Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port })
             .then(async (data) => {
-                this.Rcon('Sol', user, '!stop true 0')
+                this.Rcon('Sol', user, '!stop true 0'), console.log(`Stop Command issued to ${id}`)
             }).catch(() => {
-                console.log("Server is offline");
+                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`)
             });
     },
 
     Check: async function (id) {
         var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`).catch(() => { console.log('Could not find a Torch.js config file for this server.') })
         if (!config) return false
-        var Tasklist = spawn(`tasklist`).stdout.on('data', (data) => data.toString())
+        config = JSON.parse(config.toString())
 
-        if (config.online) {
-            if (!Tasklist.includes(`${id}.Server.exe`)) return this.Check(id, 'system')
+        var Command = spawn(`tasklist`)
+        var Tasklist = ''
+        Command.stdout.on('data', (data) => {
+            Tasklist += data.toString()
+        })
 
-            var query = Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port }).then(async (data) => true).catch(() => false)
-            if (query) return true
-        }
+        Command.on('close', async () => {
+            if (config.online) {
+                if (!Tasklist.includes(`${id}.Server.exe`)) return this.Start(id, 'system'), console.log('Starting Server from Tasklist...')
+                var query = await Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port }).then(async (data) => true).catch(() => false)
+                if (!query) this.Start(id, 'system'), console.log('Starting Server from Query...')
+                if (!Attached[id]) return this.Stop(id, 'system'), console.log(`Restarting ${id} as it has been detached from the controller...`)
+            }
 
-        if (Tasklist.includes(`${id}.Server.exe`) && config.online) return 'Server is Running'
-        if (!Tasklist.includes(`${id}.Server.exe`) && !config.online) return 'Server is Offline'
-
-        if (Tasklist.includes(`${id}.Server.exe`) && config.online) return true
+            if (!config.online) {
+                if (Tasklist.includes(`${id}.Server.exe`)) return this.Stop(id, 'system'), console.log('Stopping Server from Tasklist...')
+                var query = await Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port }).then(async (data) => true).catch(() => false)
+                if (query) this.Stop(id, 'system'), console.log('Stopping Server from Query...')
+            }
+        })
     },
 
     Rcon: async function (id, user, command) {

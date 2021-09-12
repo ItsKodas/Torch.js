@@ -12,8 +12,9 @@
 
         <div class="row" style="margin: 1em 0;">
             <p style="font-size: 30pt;"><%= config.id %></p>
-            <p onclick="startServer('<%= config.id %>')" style="margin: 0 2em; color: #55eb48; cursor: pointer;">Start</p>
-            <p onclick="stopServer('<%= config.id %>')" style="color: red; cursor: pointer;">Stop</p>
+            <p onclick="sendServerAction('<%= config.id %>', 'start')" style="margin: 0 2em; color: #55eb48; cursor: pointer;">Start</p>
+            <p onclick="sendServerAction('<%= config.id %>', 'stop')" style="margin: 0 2em; color: red; cursor: pointer;">Stop</p>
+            <p onclick="sendServerAction('<%= config.id %>', 'check')" style="margin: 0 2em; color: lightskyblue; cursor: pointer;">Check</p>
         </div>
 
         <div class="card" style="margin: 0;">

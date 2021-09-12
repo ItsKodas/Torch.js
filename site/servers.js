@@ -128,6 +128,7 @@ module.exports = async function (app, SystemConfig, io) {
 
             var config = {
                 id: name,
+                port: req.body.server_port,
                 type: req.body.server_type,
                 online: false,
                 active: {
