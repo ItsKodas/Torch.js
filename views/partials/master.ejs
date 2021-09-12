@@ -19,12 +19,14 @@
 <nav class="topnav">
     <a href="/">Dashboard</a>
     <a href="/servers">Servers</a>
+    <a href="/plugins">Plugins</a>
+    <a href="/mods">Mods</a>
     <a hidden href="/discord">Discord</a>
 
     <script>
         $(function() {
             if (location.pathname.split("/")[1] === "") return $('nav a[href="/"]').addClass("active");
-            $('nav a[href^="/' + location.pathname.split("/")[1] + '"]').addClass("active");
+            $(`nav a[href="/${location.pathname.split("/")[1]}"]`).addClass("active");
         });
     </script>
 </nav>

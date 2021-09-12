@@ -10,7 +10,7 @@ module.exports = async function (app, SystemConfig, io) {
     var socket = await io.on('connection', async (socket) => socket)
 
     app.get('/servers', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'servers')) return res.status(403).send()
+        if (!Permissions.Check(req.account.discord, 'server.list')) return res.status(403).send()
 
         var data = {
             servers: [],
@@ -18,7 +18,22 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         try {
-            data.servers = await fs.promises.readdir(SystemConfig.system.directory)
+            var servers = await fs.promises.readdir(SystemConfig.system.directory)
+            for (server of servers) {
+
+                if (!fs.existsSync(`${SystemConfig.system.directory}\\${server}\\Torch.js`)) {
+                    data.servers.push({ id: server, notImported: true })
+                    continue
+                }
+
+                var config = await fs.promises.readFile(`${SystemConfig.system.directory}\\${server}\\Torch.js\\config.json`).catch(() => { console.log(`${server} has no config.json`) })
+                if (!config) {
+                    data.servers.push({ id: server, error: true })
+                    continue
+                }
+
+                data.servers.push(JSON.parse(config))
+            }
 
             data.presets['worlds'] = await fs.promises.readdir('./presets/instance/world')
             data.presets['configs'] = await fs.promises.readdir('./presets/instance/config')
@@ -33,7 +48,7 @@ module.exports = async function (app, SystemConfig, io) {
 
 
     app.post('/servers/create', async function (req, res) {
-        if (!Permissions.Check(req.account.discord, 'create_server')) return res.status(403).send("You do not have permission to do this.")
+        if (!Permissions.Check(req.account.discord, 'server.create')) return res.status(403).send("You do not have permission to do this.")
         if (await fs.existsSync('.\\BUSY')) return res.status(400).send("Server is busy.")
 
         var name = req.body.server_name.trim()
@@ -74,13 +89,13 @@ module.exports = async function (app, SystemConfig, io) {
                 if (err) return console.log(err), res.status(500).send(err), deleteServer()
                 socket.emit('server_install_world')
 
-                var config_file = await fs.promises.readFile(`.\\presets\\instance\\config\\${req.body.server_config_preset}`).catch(err => res.status(500).send(err))
-                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => res.status(500).send(err))
+                var config_file = await fs.promises.readFile(`.\\presets\\instance\\config\\${req.body.server_config_preset}`).catch(err => console.log(err))
+                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Instance\\Saves\\World\\Sandbox_config.sbc`, config_file).catch(err => console.log(err))
 
-                var torch_cfg = await fs.promises.readFile(`.\\resources\\torch\\torch.cfg`).catch(err => res.status(500).send(err))
+                var torch_cfg = await fs.promises.readFile(`.\\resources\\torch\\torch.cfg`).catch(err => console.log(err))
                 torch_cfg = torch_cfg.toString().replace('%SERVER_NAME%', name)
                 torch_cfg = torch_cfg.toString().replace('%INSTANCE_PATH%', `${SystemConfig.system.directory}\\${name}\\Instance`)
-                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.cfg`, torch_cfg).catch(err => res.status(500).send(err))
+                await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.cfg`, torch_cfg).catch(err => console.log(err))
 
                 socket.emit('server_install_config')
 
@@ -109,19 +124,26 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         async function postSEDS() {
-            console.log(`${name} Fully Setup!`)
+            console.log(`${name} Installation Complete!`)
 
             var config = {
                 id: name,
+                port: req.body.server_port,
                 type: req.body.server_type,
                 online: false,
+                active: {
+                    server_config: `Default.cfg`,
+                    world_config: `Default.sbc`
+                },
                 permissions: {
                     full: ['administrators']
                 },
                 restart: []
             }
 
-            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\torch.json`, JSON.stringify(config, null, '\t')).catch(err => res.status(500).send(err))
+            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
+            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
 
             socket.emit('server_install_seds_done', { server: name })
 
@@ -129,7 +151,7 @@ module.exports = async function (app, SystemConfig, io) {
         }
 
         async function deleteServer() {
-            await fs.promises.rmdir(`${SystemConfig.system.directory}\\${name}`, { recursive: true }).catch(err => res.status(500).send(err))
+            await fs.promises.rmdir(`${SystemConfig.system.directory}\\${name}`, { recursive: true }).catch(err => console.log(err))
             await fs.promises.unlink('.\\BUSY').catch(() => { console.log('Server not Busy.') })
         }
 

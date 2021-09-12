@@ -40,6 +40,52 @@ function createNewServer() {
     return false
 }
 
+function importServer(id) {
+    var formdata = new FormData()
+    formdata.append('id', id)
+    formdata.append('action', 'import')
+
+    var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow'
+    };
+
+    fetch(`/server`, requestOptions)
+        .then(async response => {
+            var text = await response.text()
+            var status = response.status
+            if (status == 200) {
+                window.location.reload()
+            } else alert(text)
+        })
+        .catch(error => console.log('error', error))
+}
+
+function resetServer(id) {
+    if (!confirm('Are you sure you want to reset this servers config?')) return
+
+    var formdata = new FormData()
+    formdata.append('id', id)
+    formdata.append('action', 'reset')
+
+    var requestOptions = {
+        method: 'POST',
+        body: formdata,
+        redirect: 'follow'
+    };
+
+    fetch(`/server`, requestOptions)
+        .then(async response => {
+            var text = await response.text()
+            var status = response.status
+            if (status == 200) {
+                window.location.reload()
+            } else alert(text)
+        })
+        .catch(error => console.log('error', error))
+}
+
 
 socket.on('server_install_torch', function (data) {
     if (!data.time.includes('/')) {
@@ -111,7 +157,7 @@ socket.on('server_install_seds_done', (data) => {
     $('#setup_title').html(`${data.server} Setup Complete!`)
     $('#setup_patch_seds').html(`<p>SEDS Ready!</p><i class="fas fa-check" style="color: #66ec54; margin: 1em 0 0 16.5em; position: absolute;"></i>`)
 
-    setTimeout(() => { window.location.href =`/server?id=${data.server}` }, 3000)
+    setTimeout(() => { window.location.href = `/server?id=${data.server}` }, 3000)
 })
 
 

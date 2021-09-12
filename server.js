@@ -152,3 +152,24 @@ fs.readdir('./site', (err, files) => {
         require('./site/discord/callback.js')(app, SystemConfig)
     }
 })
+
+
+
+//!
+//! Event Loop
+//!
+
+const Controls = require('./functions/controls')
+async function eventLoop() {
+    console.log('Checking Servers...')
+    var servers = await fs.promises.readdir(SystemConfig.system.directory).catch(err => console.log(err))
+    if (!servers) return console.log('No Servers Found.')
+
+    for (instance of servers) {
+        if (!fs.existsSync(`${SystemConfig.system.directory}\\${instance}\\Torch.js`)) { console.log(`${instance} has not been imported.`); continue }
+        var config = fs.promises.readFile(`${SystemConfig.system.directory}\\${instance}\\Torch.js\\config.json`).catch(err => console.log(err))
+        if (!config) { console.log(`${instance} has an invalid Torch.js Config.`); continue }
+        Controls.Check(instance)
+    }
+}
+setInterval(eventLoop, 5000)

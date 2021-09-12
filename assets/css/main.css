@@ -38,6 +38,10 @@ html * {
     color: white;
 }
 
+.row * {
+    display: inline;
+}
+
 .top-title {
     margin: .4em;
     margin-left: 1em;

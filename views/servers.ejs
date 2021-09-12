@@ -7,6 +7,7 @@
     <%- include('partials/master.ejs') %>
 
     <link rel="stylesheet" href="/assets/css/elements/setup_table.css" />
+    <link rel="stylesheet" href="/assets/css/elements/servers_table.css" />
 </head>
 
 <body>
@@ -14,26 +15,29 @@
         <button data-open="modal_new_server">Create New Server</button>
     </div>
 
-    <div style="display: flex">
-        <div class="card" id="create_standalone_sector" style="display: none">
-            <h2>Standalone Instance</h2>
-            <button id="createSA_createButton" style="position: flex;   float: right;   margin-top: -2em;   background-color: #e2563e;" class="open-modal" data-open="modal_main">Create</button>
+    <table class="servers_table" style="margin: 1em; width: 95%;">
+        <tr style="background-color: #5e87c4;">
+            <td style="font-size: 15pt;">Name</td>
+            <td style="font-size: 15pt;">Type</td>
+            <td style="font-size: 15pt;">Status</td>
+        </tr>
 
-            <div id="createSA_options">
-                <label style="padding-top: 0">Instance Name</label>
-                <input id="instance_name" name="Instance Name" type="text" placeholder="E.g. Sol" />
-            </div>
+        <% for (server of data.servers) { %>
+        <tr>
+            <td>
+                <a href="/server?id=<%= server.id %>" style="color: tomato;"><%= server.id %> <i class="fas fa-external-link-alt" style="margin-left: .3em; color: tomato;"></i></a>
+            </td>
+            <td><%= server.type || 'N/A' %></td>
+            <% if (server.error) { %><td>Failed to Import! | <span onclick="resetServer('<%= server.id %>')" style="color: red; text-decoration: underline; cursor: pointer;">Reset Config</span></td><% } %>
+            <% if (server.notImported) { %><td>Server has not been Imported | <span onclick="importServer('<%= server.id %>')" style="color: rgb(50, 206, 50); text-decoration: underline; cursor: pointer;">Import</span></td><% } %>
+        </tr>
+        <% } %>
 
-            <div id="installSA_options" style="display: none">
-                <progress id="installSA_progress" value="0" max="100" style="width: 30em"></progress>
-                <div style="white-space: nowrap">
-                    <p id="installSA_progress_percent" style="display: inline-block">0%</p>
-                    <p id="installSA_progress_time" style="direction: rtl; display: inline-block; width: 93%">...Loading</p>
-                </div>
-            </div>
-        </div>
-    </div>
+    </table>
 </body>
+
+
+
 
 
 <div class="modal <% if (data.servers.length === 0) { %>is-visible<% } %>" id="modal_new_server">
@@ -54,9 +58,9 @@
                         <label>Server Type <% if (!locals.nexus) { %><span id="nexus_warning" style="color: red; display: none;">- Nexus is Required for Sectoring!</span><% } %></label>
                         <select id="server_type" onchange="updateServerType()">
                             <option selected>Standalone</option>
-                            <option>Lobby</option>
-                            <option>Normal Sector</option>
-                            <option>General Sector</option>
+                            <option disabled>Lobby</option>
+                            <option disabled>Normal Sector</option>
+                            <option disabled>General Sector</option>
                         </select>
 
                         <script style="display: none;">
