@@ -1,11 +1,13 @@
 const { spawn } = require('child_process')
 
 const Permissions = require('../functions/permissions')
+const Discord = require('../functions/discord')
 
 const fs = require('fs')
+const Password = require('generate-password')
 const ncp = require('ncp').ncp
 
-module.exports = async function (app, SystemConfig, io) {
+module.exports = async function (app, client, SystemConfig, io) {
 
     var socket = await io.on('connection', async (socket) => socket)
 
@@ -51,7 +53,7 @@ module.exports = async function (app, SystemConfig, io) {
         if (!Permissions.Check(req.account.discord, 'server.create')) return res.status(403).send("You do not have permission to do this.")
         if (await fs.existsSync('.\\BUSY')) return res.status(400).send("Server is busy.")
 
-        var name = req.body.server_name.trim()
+        var name = req.body.server_id.trim()
         req.body.server_config_preset = req.body.server_config_preset.replace(' ', '_'), req.body.server_config_preset += '.xml'
 
         if (!name.match(/^[a-zA-Z0-9-_]+$/)) return res.status(400).send("Instance name contains invalid characters.")
@@ -128,26 +130,30 @@ module.exports = async function (app, SystemConfig, io) {
 
             var config = {
                 id: name,
-                port: req.body.server_port,
+                port: req.body.server_game_port,
+                rcon: req.body.server_rcon_port,
+                rcon_password: 'password',
                 type: req.body.server_type,
                 online: false,
                 active: {
+                    world: `World`,
                     server_config: `Default.cfg`,
-                    world_config: `Default.sbc`
+                    world_config: `Default.sbc`,
+                    mod_list: null
                 },
                 permissions: {
                     full: ['administrators']
                 },
-                restart: []
+                restart_times: []
             }
 
-            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
-            fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\Server`, { recursive: true }).catch(err => console.log(err))
+            await fs.promises.mkdir(`${SystemConfig.system.directory}\\${name}\\Torch.js\\Presets\\World`, { recursive: true }).catch(err => console.log(err))
             await fs.promises.writeFile(`${SystemConfig.system.directory}\\${name}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(err => console.log(err))
 
             socket.emit('server_install_seds_done', { server: name })
 
-            await fs.promises.unlink('.\\BUSY').catch(() => console.log('Server not Busy.'))
+            await fs.promises.unlink('.\\BUSY').catch(() => console.log('Server not Busy.')), Discord.Notification(`⭐ New Instance Created (${name})`, '#9f39ed')
         }
 
         async function deleteServer() {

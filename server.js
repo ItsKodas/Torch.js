@@ -60,6 +60,21 @@ SystemConfig = require('./local/system.json')
 
 
 //!
+//! Discord.js
+//!
+
+const { Client, Intents } = require('discord.js')
+var selectedIntents = []
+for (intent in Intents.FLAGS) { selectedIntents.push(Intents.FLAGS[intent]) }
+const client = new Client({ intents: selectedIntents })
+if (SystemConfig.discord.token) client.login(SystemConfig.discord.token)
+client.on('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`)
+})
+
+
+
+//!
 //! Startup
 //!
 
@@ -146,10 +161,10 @@ fs.readdir('./site', (err, files) => {
     if (err) return console.log(err)
     else {
         for (file of files) {
-            if (file.includes('.js')) require('./site/' + file)(app, SystemConfig, io)
+            if (file.includes('.js')) require('./site/' + file)(app, client, SystemConfig, io)
         }
 
-        require('./site/discord/callback.js')(app, SystemConfig)
+        require('./site/discord/callback.js')(app, client, SystemConfig)
     }
 })
 
@@ -161,15 +176,14 @@ fs.readdir('./site', (err, files) => {
 
 const Controls = require('./functions/controls')
 async function eventLoop() {
-    console.log('Checking Servers...')
     var servers = await fs.promises.readdir(SystemConfig.system.directory).catch(err => console.log(err))
     if (!servers) return console.log('No Servers Found.')
 
     for (instance of servers) {
-        if (!fs.existsSync(`${SystemConfig.system.directory}\\${instance}\\Torch.js`)) { console.log(`${instance} has not been imported.`); continue }
+        if (!fs.existsSync(`${SystemConfig.system.directory}\\${instance}\\Torch.js`)) { continue }
         var config = fs.promises.readFile(`${SystemConfig.system.directory}\\${instance}\\Torch.js\\config.json`).catch(err => console.log(err))
         if (!config) { console.log(`${instance} has an invalid Torch.js Config.`); continue }
         Controls.Check(instance)
     }
 }
-setInterval(eventLoop, 5000)
+setInterval(eventLoop, 20 * 1000), eventLoop()

@@ -1,6 +1,6 @@
 var fetch = require('node-fetch');
 
-module.exports = function(app, SystemConfig) {
+module.exports = function(app, client, SystemConfig) {
 
     app.get('/login', function(req, res) {
         res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${SystemConfig.discord.id}&redirect_uri=http%3A%2F%2F${SystemConfig.web.address}%3A${SystemConfig.web.port}%2Fcallback&response_type=code&scope=identify`)

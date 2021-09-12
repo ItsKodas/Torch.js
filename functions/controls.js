@@ -1,5 +1,6 @@
 const SystemConfig = require('../local/system.json')
 const Permissions = require('./permissions')
+const Discord = require('./discord')
 
 const { spawn } = require('child_process')
 
@@ -26,11 +27,31 @@ module.exports = {
 
         Command.on('close', () => {
             if (Tasklist.includes(`${id}.Server.exe`)) return
-            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true })
+
+            Attached[id] = spawn(`${SystemConfig.system.directory}\\${id}\\${id}.Server.exe`, [], { detached: true }), Discord.Notification(`⏳ ${id} Starting...`, '#4273fc')
             Attached[id].stdout.on('data', (data) => {
                 data = data.toString()
                 console.log(data)
-                if (data.includes('Server stopped.')) Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), delete Attached[id]
+
+                if (data.includes('Game ready')) {
+                    Discord.Notification(`✅ ${id} is Ready to Join!`, '#33d438')
+                }
+
+                if (data.includes('Server stopped.')) {
+                    Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`])
+                    delete Attached[id]
+                    Discord.Notification(`⛔ ${id} has Stopped`, '#d43333')
+                }
+
+                if (data.includes('[FATAL]')) {
+                    Discord.Notification(`⚠️ ${id} has had a Fatal Error!\n\n>>> ${data}`, '#d43333')
+                }
+
+                if (data.includes('Generating minidump at')) {
+                    Attached[id].kill() || spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`])
+                    delete Attached[id]
+                    Discord.Notification(`❌ ${id} has Crashed!`, '#d43333')
+                }
             })
         })
     },
@@ -43,12 +64,12 @@ module.exports = {
         if (user !== 'system') config.online = false
         await fs.promises.writeFile(`${SystemConfig.system.directory}\\${id}\\Torch.js\\config.json`, JSON.stringify(config, null, '\t')).catch(() => { console.log('Could not write a Torch.js config file for this server.') })
 
-        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`)
+        if (!Attached[id] || force) return spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
         Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port })
             .then(async (data) => {
-                this.Rcon('Sol', user, '!stop true 0'), console.log(`Stop Command issued to ${id}`)
+                this.Rcon('Sol', user, '!stop true 0'), console.log(`Stop Command issued to ${id}`), Discord.Notification(`⏳ Stop Request Issued to ${id}`, '#e06f28')
             }).catch(() => {
-                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`)
+                spawn(`powershell`, ['Stop-Process', `-Name ${id}.Server`]), console.log(`Killed ${id}`), Discord.Notification(`☠️ ${id}'s Process was Forcefully Killed`, '#400505')
             });
     },
 
@@ -68,7 +89,7 @@ module.exports = {
                 if (!Tasklist.includes(`${id}.Server.exe`)) return this.Start(id, 'system'), console.log('Starting Server from Tasklist...')
                 var query = await Gamedig.query({ type: 'spaceengineers', host: '127.0.0.1', port: config.port }).then(async (data) => true).catch(() => false)
                 if (!query) this.Start(id, 'system'), console.log('Starting Server from Query...')
-                if (!Attached[id]) return this.Stop(id, 'system'), console.log(`Restarting ${id} as it has been detached from the controller...`)
+                if (!Attached[id]) return this.Stop(id, 'system'), console.log(`Restarting ${id} as it has been detached from the controller...`), Discord.Notification(`⚠️ Rebooting ${id} as it has been detached from the controller`, '#e3d23d')
             }
 
             if (!config.online) {

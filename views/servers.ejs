@@ -48,11 +48,11 @@
 
         <section id="setup_content" class="modal-content">
             <h3>General Configurations</h3>
-            <table class="setup_table" style="border-color: white; width: 100%;">
+            <table class="setup_table" style="border-color: white; width: 100%; margin-top: -1em;">
                 <tr>
                     <td>
-                        <label>Server Name</label>
-                        <input id="server_name" type="text" placeholder="E.g. Solar System">
+                        <label>Server ID</label>
+                        <input id="server_id" type="text" placeholder="E.g. Sol">
                     </td>
                     <td>
                         <label>Server Type <% if (!locals.nexus) { %><span id="nexus_warning" style="color: red; display: none;">- Nexus is Required for Sectoring!</span><% } %></label>
@@ -95,6 +95,28 @@
                                 window.open('/presets/instance/config/' + configFile, '_blank')
                             }
                         </script>
+                    </td>
+                </tr>
+            </table>
+
+            <h3 style="margin-top: 2em;">Network Configurations</h3>
+            <table class="setup_table" style="border-color: white; width: 100%; margin-top: -1em;">
+                <tr>
+                    <td>
+                        <label>Server Port</label>
+                        <input id="server_game_port" type="number" placeholder="27016" value="27016">
+                    </td>
+                    <td>
+                        <label>Rcon Port <span style="color: red;">- KEEP THIS PORT CLOSED</span></label>
+                        <input id="server_rcon_port" type="number" placeholder="37016" value="37016">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        
+                    </td>
+                    <td>
+                        
                     </td>
                 </tr>
             </table>
