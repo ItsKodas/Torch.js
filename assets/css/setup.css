@@ -6,8 +6,24 @@
     background-color: #747780;
 }
 
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+ ::-webkit-scrollbar-track {
+    background: #414141;
+}
+
+ ::-webkit-scrollbar-thumb {
+    background: #616161;
+}
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
 html {
-    background-color: #2d343b;
+    background-color: rgb(37, 37, 37);
     margin: 0;
     padding: 0;
 }
@@ -28,12 +44,13 @@ html * {
 }
 
 .card {
-    background-color: #3f4853;
+    background-color: #323336;
     margin: 1em;
     padding: 1em;
     padding-right: 1.75em;
     position: relative;
     border-radius: .3em;
+    display: inline-block;
 }
 
 .card * {
@@ -51,14 +68,14 @@ html * {
 }
 
 input {
-    background-color: #394047;
+    background-color: #3f4244;
     border-style: solid;
     border-color: #5e6063;
     outline: none;
     border-radius: .2em;
     font-size: 15pt;
     padding: .2em;
-    width: 30em;
+    width: 25em;
 }
 
 button {

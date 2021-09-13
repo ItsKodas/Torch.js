@@ -55,22 +55,17 @@ if (process.argv[2] === 'uninstall') {
 //! Load Configurations
 //!
 
-SystemConfig = require('./local/system.json')
+process.cfg, SystemConfig = require('./local/system.json')
 
+if (SystemConfig.license) {
+    fetch(`http://horizons.gg:9000/request?id=${SystemConfig.license.key}&email=${SystemConfig.license.email}`)
+        .then(response => {
+            if (response.status === 200) response.text().then(text => process.license = JSON.parse(text)), console.log('License Validated.')
+            else response.text().then(text => console.log(text))
 
-
-//!
-//! Discord.js
-//!
-
-const { Client, Intents } = require('discord.js')
-var selectedIntents = []
-for (intent in Intents.FLAGS) { selectedIntents.push(Intents.FLAGS[intent]) }
-const client = new Client({ intents: selectedIntents })
-if (SystemConfig.discord.token) client.login(SystemConfig.discord.token)
-client.on('ready', () => {
-    console.log(`Logged in as ${client.user.tag}!`)
-})
+        })
+        .catch(error => console.log(error), process.env.license = { premium: 0 })
+}
 
 
 
@@ -161,10 +156,10 @@ fs.readdir('./site', (err, files) => {
     if (err) return console.log(err)
     else {
         for (file of files) {
-            if (file.includes('.js')) require('./site/' + file)(app, client, SystemConfig, io)
+            if (file.includes('.js')) require('./site/' + file)(app, SystemConfig, io)
         }
 
-        require('./site/discord/callback.js')(app, client, SystemConfig)
+        require('./site/discord/callback.js')(app, SystemConfig)
     }
 })
 

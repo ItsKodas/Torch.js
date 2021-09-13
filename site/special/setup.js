@@ -1,10 +1,11 @@
 const { spawn } = require('child_process')
 
 const fs = require('fs')
+const fetch = require('node-fetch')
 
-module.exports = function(app, home_dir) {
+module.exports = function (app, home_dir) {
 
-    app.get('/', async(req, res) => {
+    app.get('/', async (req, res) => {
 
         var server_ipv4 = await require('public-ip').v4()
         var default_dir = `${home_dir}\\Servers`
@@ -17,6 +18,10 @@ module.exports = function(app, home_dir) {
         var data = req.body
 
         var system_config = {
+            license: {
+                email: data.license_email,
+                key: data.system_key
+            },
             web: {
                 setup_complete: true,
                 port: data.system_port,
@@ -48,6 +53,15 @@ module.exports = function(app, home_dir) {
         res.status(200).send('Configurations Saved!')
         spawn('util/nssm.exe start Torch.js', null, { detached: true, stdio: 'ignore' })
         process.exit()
+    })
+
+    app.post('/license', (req, res) => {
+        fetch(`http://horizons.gg:9000/create?address=${req.body.license_address}&email=${req.body.license_email}&fname=${req.body.license_fname}&lname=${req.body.license_lname}`)
+            .then(response => {
+                response.text().then(text => res.status(response.status).send(text))
+
+            })
+            .catch(error => console.log(error))
     })
 
     app.get('/uninstall', (req, res) => {

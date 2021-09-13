@@ -7,12 +7,14 @@ const fs = require('fs')
 const Password = require('generate-password')
 const ncp = require('ncp').ncp
 
-module.exports = async function (app, client, SystemConfig, io) {
+module.exports = async function (app, SystemConfig, io) {
 
     var socket = await io.on('connection', async (socket) => socket)
 
     app.get('/servers', async function (req, res) {
         if (!Permissions.Check(req.account.discord, 'server.list')) return res.status(403).send()
+
+        console.log(process.license)
 
         var data = {
             servers: [],

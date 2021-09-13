@@ -11,12 +11,12 @@
 
 <body>
 
-    <div style="background-color: #3f4853; width: 100%; display: inline-block;">
+    <div style="background-color: #323336; width: 100%; display: inline-block;">
         <h1 class="top-title">Setup</h1>
         <i onclick="submit_configurations()" class="fas fa-file-export fa-2x" style="position: absolute; top: .6em; right: .5em; cursor: pointer;" title="Save System Configurations"></i>
     </div>
 
-    <div style="width: 100%; display: flex;">
+    <div style="width: 100%; display: flex; flex-wrap: wrap;">
 
         <div class="card">
             <h2>System</h2>
@@ -54,6 +54,42 @@
 
             <label>Please add the following redirect to your application:</label>
             <span id="redirect_url" style="color: tomato;">N/A</span>
+        </div>
+
+        <div class="card">
+            <h2>License</h2>
+
+            <label style="padding-top: 0;">Registered Address</label>
+            <input id="license_address" name="First Name" type="text" placeholder="domain.com or 0.0.0.0">
+
+            <label>Email Address</label>
+            <input id="license_email" name="Email Address" type="email" placeholder="you@email.com">
+
+            <label>First Name</label>
+            <input id="license_fname" name="First Name" type="text" placeholder="Joe">
+
+            <label>Last Name</label>
+            <input id="license_lname" name="Last Name Name" type="text" placeholder="Biden">
+
+            <button class="get-license-button" onclick="getLicense()">Request License</button>
+            <style style="display: none;">
+                .get-license-button {
+                    width: 100%;
+                    background-color:#363636;
+                    border-color: #2aa02a;
+                    border-style: solid;
+                    border-width: .01em;
+                    color: #d1d1d1;
+                }
+                .get-license-button:hover {background-color: #3b3b3b;}
+                .get-license-button:active {background-color: #444444;}
+            </style>
+
+            <br>
+
+            <label>License Key</label>
+            <input id="system_key" name="License Key" type="text" placeholder="xxxx-xxxx-xxxx-xxxx">
+            <br>
         </div>
 
     </div>

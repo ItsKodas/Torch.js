@@ -1,6 +1,6 @@
 const SystemConfig = require('../local/system.json')
 const Permissions = require('./permissions')
-const Discord = require('./discord')
+const Discord = require('./discord.js')
 const Essentials = require('./essentials')
 
 const { spawn } = require('child_process')
