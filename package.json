@@ -5,6 +5,7 @@
     "discord.js": "^13.1.0",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "extract-zip": "^2.0.1",
     "fs": "^0.0.1-security",
     "gamedig": "^3.0.7",
     "generate-password": "^1.6.1",

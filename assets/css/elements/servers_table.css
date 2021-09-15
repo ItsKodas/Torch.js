@@ -6,6 +6,8 @@
     border-style: solid;
     border-color: #5e6063;
     border-collapse: collapse;
+    border-right: none;
+    border-left: none;
 }
 
 .servers_table td * {

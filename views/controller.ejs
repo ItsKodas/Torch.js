@@ -10,16 +10,84 @@
 <body>
     <div style="margin: 0 2em;">
 
-        <div class="row" style="margin: 1em 0;">
+        <div style="margin-top: -1.5em;">
             <p style="font-size: 30pt;"><%= config.id %></p>
-            <p onclick="sendServerAction('<%= config.id %>', 'start')" style="margin: 0 2em; color: #55eb48; cursor: pointer;">Start</p>
-            <p onclick="sendServerAction('<%= config.id %>', 'stop')" style="margin: 0 2em; color: red; cursor: pointer;">Stop</p>
-            <p onclick="sendServerAction('<%= config.id %>', 'check')" style="margin: 0 2em; color: lightskyblue; cursor: pointer;">Check</p>
+
+            <div class="row" style="margin-top: -2em; margin-bottom: 1em;">
+                <p onclick="sendServerAction('<%= config.id %>', 'start')" style="margin: 0 2em; color: #55eb48; cursor: pointer;">Start</p>
+                <p onclick="sendServerAction('<%= config.id %>', 'stop')" style="margin: 0 2em; color: red; cursor: pointer;">Stop</p>
+            </div>
+
+            <div id="server-config-nav" class="row config-nav noselect" style="background-color: #323336;">
+                <a href="#server">Server</a>
+                <a href="#world">World</a>
+                <a href="#mods">Mods</a>
+                <a href="#discord">Discord</a>
+                <a href="#console">Console</a>
+            </div>
         </div>
 
-        <div class="card" style="margin: 0;">
-            Coming Soon
-        </div>
+        <section id="tabs">
+
+            <div id="tab-server" class="card config-tab">
+
+
+                <div class="row" style="display: flex; flex-wrap: nowrap;">
+                    <div class="col" style="padding-left: 0;">
+                        <label style="padding-top: 0;">Active Server Preset</label>
+                        <select id="server_config_preset">
+                            <% for (server_cfg of presets.server) { %>
+                                <option value="<%= server_cfg %>" <% if (server_cfg === config.active.server_config) { %>selected<% } %>><%= server_cfg.split('.')[0] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+
+                    <div class="col" style="margin-top: -2em; padding-right: 0;">
+                        <label>Active World Preset</label>
+                        <select id="server_world_preset">
+                            <% for (world_cfg of presets.world) { %>
+                                <option value="<%= world_cfg %>" <% if (world_cfg === config.active.world_config) { %>selected<% } %>><%= world_cfg.split('.')[0] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 2em;">
+                    <label style="padding-top: 0;">Edit Preset</label>
+                    <select id="server_config_preset">
+                        <option disabled>Server Configs</option>
+                        <% for (server_cfg of presets.server) { %>
+                            <option value="<%= server_cfg %>"><%= server_cfg.split('.')[0] %></option>
+                        <% } %>
+                        <option disabled></option>
+                        <option disabled>World Configs</option>
+                        <% for (world_cfg of presets.world) { %>
+                            <option value="<%= world_cfg %>"><%= world_cfg.split('.')[0] %></option>
+                        <% } %>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="tab-world" class="card config-tab"> 
+                Hello World!
+            </div>
+
+            <div id="tab-mods" class="card config-tab"> 
+                Hello Mods!
+            </div>
+
+            <div id="tab-discord" class="card config-tab"> 
+                Hello Discord!
+            </div>
+
+            <div id="tab-console" class="card config-tab"> 
+                <textarea id="live-console" style="width: 100%; resize: vertical; background-color: #1f1f1f; height: 20em; max-height: 40em;" readonly></textarea>
+                <label>Send Command</label>
+                <input id="command-bar" type="text" placeholder="say Hello World!">
+            </div>
+
+        </section>
 
     </div>
 </body>
@@ -32,3 +100,74 @@
 
 
 </html>
+
+<style>
+    .config-nav a {
+        margin: 0 -.25em 0 0;
+        padding: .5em 1em;
+        color: white;
+        background-color: #323336;
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+    .config-nav a:hover, .config-nav a:active, .config-nav .active {
+        color: #323336;
+        background-color: #f2f2f2;
+    }
+
+    .config-tab {
+        margin: 0;
+        background-color: #1a1a1a;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    .col {
+        width: 50%;
+        padding: 0 1em;
+    }
+
+    input {
+        background-color: #252525;
+        border-color: #4d4d4d;
+    }
+
+    select, option {
+        background-color: #252525;
+        border-color: #4d4d4d;
+    }
+
+    textarea:focus {
+        outline: none;
+        white-space: nowrap;
+    }
+</style>
+
+<script>
+    function setTab() {
+        $('#server-config-nav').find('a').removeClass('active')
+        $('#server-config-nav').find(`a[href="${window.location.hash}"]`).addClass('active')
+        $('#tabs').find('[id^="tab-"]').hide()
+        $('#tabs').find(`#tab-${window.location.hash.replace('#', '')}`).show()
+        if (!window.location.hash) $('#server-config-nav').find(`a[href="#server"]`).addClass('active'), $('#tabs').find(`#tab-server`).show()
+    } setTab()
+    window.addEventListener('hashchange', setTab)
+
+    function refreshConsole() {
+        fetch('/server/log?id=<%= config.id %>')
+            .then(res => {
+                res.text().then(text => {$('#live-console').html(text); $('#live-console').scrollTop($('#live-console')[0].scrollHeight)})
+            })
+            .catch(err => console.error(err))  
+    } refreshConsole(), setInterval(refreshConsole, 5000)
+
+    $('#command-bar').keydown(function(e) {
+        if (e.keyCode !== 13 || !$('#command-bar').val()) return
+        fetch('/server/command?id=<%= config.id %>&cmd=' + $('#command-bar').val()).then(() => refreshConsole())
+        $('#command-bar').val('')
+    })
+
+</script>
+
+<%- include('partials/modals.ejs') %>

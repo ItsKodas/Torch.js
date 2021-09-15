@@ -15,6 +15,21 @@
     </div>
 </div>
 
+<div class="modal" id="modal_editor">
+    <div class="modal-dialog" style="width: 100%; height: 100%;">
+        <header class="modal-header" style="padding-bottom: 0;">
+            <strong>Editor</strong>
+        </header>
+        <section class="modal-content">
+            <textarea style="width: 100%; resize: vertical; background-color: #1f1f1f; height: 45em; max-height: 45em; min-height: 10em;"></textarea>
+        </section>
+        <footer class="modal-footer" style="margin-top: -5em;">
+            <button style="position: flex; float: left; background-color: #E2563E" data-close>Cancel</button>
+            <button id="modal_main_confirm" style="position: flex; float: right; background-color: #169fc9" onclick="createStandaloneInstance()" data-close>Save</button>
+        </footer>
+    </div>
+</div>
+
 <script>
     const openEls = document.querySelectorAll("[data-open]");
     const closeEls = document.querySelectorAll("[data-close]");
