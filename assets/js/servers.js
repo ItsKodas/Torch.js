@@ -57,7 +57,7 @@ function importServer(id) {
             var status = response.status
             if (status == 200) {
                 window.location.reload()
-            } else alert(text)
+            } else alert('An error has occured, please try again.'), window.location.reload()
         })
         .catch(error => console.log('error', error))
 }
@@ -81,7 +81,7 @@ function resetServer(id) {
             var status = response.status
             if (status == 200) {
                 window.location.reload()
-            } else alert(text)
+            } else alert('An error has occured, please try again.'), window.location.reload()
         })
         .catch(error => console.log('error', error))
 }
