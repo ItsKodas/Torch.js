@@ -103,7 +103,38 @@
             </div>
 
             <div id="tab-mods" class="card config-tab"> 
-                Hello Mods!
+
+                <div class="row" style="display: flex; flex-wrap: nowrap;">
+                    <div class="col" style="padding-left: 0;">
+                        <label style="padding-top: 0;">Active Server Preset</label>
+                        <select id="server_config_preset" onchange="fetchConfig()">
+                            <option disabled>Local Server Presets</option>
+                            <% for (server_cfg of presets.local.server) { %>
+                                <option value="local%<%= server_cfg %>" <% if (`local%${server_cfg}` === config.active.config) { %>selected<% } %>><%= server_cfg.split('.')[0] %> | Local</option>
+                            <% } %>
+                            <option disabled></option>
+                            <option disabled>Global Server Presets</option>
+                            <% for (server_cfg of presets.global.server) { %>
+                                <option value="global%<%= server_cfg %>" <% if (`global%${server_cfg}` === config.active.config) { %>selected<% } %>><%= server_cfg.split('.')[0] %> | Global</option>
+                            <% } %>
+                        </select>
+
+                        <div class="row" style="display: flex; flex-wrap: nowrap;">
+                            <button class="btn btn-primary" onclick="createConfig()">Create New Config</button>
+                            <button class="btn btn-primary" onclick="globalConfig()" style="margin-left: 1em; background-color: #e07924;">Create Global Config</button>
+                            <button class="btn btn-primary" onclick="if (confirm('Are you sure you want to delete this configuration preset?')) deleteConfig()" style="margin-left: 1em; background-color: #da3c3c;">Delete Config</button>
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <label style="padding-top: 0;">Preset Name</label>
+                        <input id="preset-name" type="text" value="<%= config.active.config.split('.')[0].split('%')[1] %>">
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveConfig()" style="float: right; margin-top: 0; margin-bottom: 1em; background-color: #42aa38;">Save Config</button>
+                <textarea id="server-editor" style="width: 100%; resize: vertical; background-color: #1f1f1f; height: 40em; max-height: 35em; min-height: 10em;" spellcheck="false"></textarea>
+            
             </div>
 
             <div id="tab-discord" class="card config-tab"> 

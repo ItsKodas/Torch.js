@@ -11,8 +11,9 @@
 
 <body>
 
-    <div style="background-color: #323336; width: 100%; display: inline-block;">
-        <h1 class="top-title">Setup</h1>
+    <div style="background-color: #323336; width: 100%; display: inline-block; height: 70px;">
+        <a href="https://www.horizons.gg" target="_blank"><img src="/assets/images/horizons.png" style="width: 250px; margin-left: 1em; margin-top: 1.2em;"></a>
+        <a href="https://discord.gg/horizons" target="_blank"><img src="/assets/images/discord.svg" style="width: 250px; position: absolute; top: 0; margin-left: -125px; left: 50%;"></a>
         <i onclick="submit_configurations()" class="fas fa-file-export fa-2x" style="position: absolute; top: .6em; right: .5em; cursor: pointer;" title="Save System Configurations"></i>
     </div>
 
@@ -57,12 +58,13 @@
         </div>
 
         <div class="card">
-            <h2>License</h2>
+            <h2 style="margin-bottom: .2em;">License</h2>
+            <p style="margin-bottom: 2em; color: turquoise;">By donating on my patreon you will be supporting the<br>development of this software and get some bonus features in return :)</p>
 
             <label style="padding-top: 0;">Registered Address</label>
             <input id="license_address" name="First Name" type="text" placeholder="domain.com or 0.0.0.0">
 
-            <label>Email Address</label>
+            <label>Email Address (Linked to your <a href="https://www.patreon.com" target="_blank" style="display: inline; color: tomato;">Patreon</a>)</label>
             <input id="license_email" name="Email Address" type="email" placeholder="you@email.com">
 
             <label>First Name</label>
@@ -87,7 +89,7 @@
 
             <br>
 
-            <label>License Key</label>
+            <label>License Key (If you already have one)</label>
             <input id="system_key" name="License Key" type="text" placeholder="xxxx-xxxx-xxxx-xxxx">
             <br>
         </div>

@@ -23,6 +23,9 @@
     <a href="/mods">Mods</a>
     <a hidden href="/discord">Discord</a>
 
+    <img src="https://cdn.discordapp.com/avatars/<%= locals.account.id %>/<%= locals.account.avatar %>.webp?size=48" style="border-radius: 50%; width: 40px; margin-top: 5px; margin-right: 1em; float: right;">
+    <a style="display: inline; float: right;"><%= `${locals.account.username}#${locals.account.discriminator}` %></a>
+
     <script>
         $(function() {
             if (location.pathname.split("/")[1] === "") return $('nav a[href="/"]').addClass("active");
